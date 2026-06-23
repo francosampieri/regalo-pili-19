@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Cumpleaños ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PANTALLA 1 — PORTADA
+══════════════════════════════════════ -->
+<div id="screen-cover" class="screen active">
+  <div class="cover-inner">
+    <p class="cover-tag">Para vos, con todo</p>
+    <h1 class="cover-title">Felices<br><em>19 años</em></h1>
+    <div class="petals">🌸 🌸 🌸</div>
+    <p class="cover-subtitle">
+      Esto no es un regalo que se abre y se guarda.<br>
+      Es algo que vamos a ir construyendo juntos.
+    </p>
+    <button class="btn btn-primary" onclick="goTo('screen-challenges')">Empezar ✨</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PANTALLA 2 — DESAFÍOS
+══════════════════════════════════════ -->
+<div id="screen-challenges" class="screen">
+  <div class="challenge-header">
+    <h2>El camino al cofre</h2>
+    <div class="progress-dots">
+      <div class="dot active" id="dot-0"></div>
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+    </div>
+  </div>
+
+  <div class="challenge-body">
+
+    <!-- ── DESAFÍO 1: CARTA ── -->
+    <div id="challenge-0" class="tab-content active">
+      <p class="section-tag">Antes de empezar</p>
+      <h2 class="section-title">Una carta para vos</h2>
+      <div class="carta-paper">
+        <!--
+          ✏️ EDITÁ EL TEXTO DE LA CARTA ACÁ
+          Cada párrafo va dentro de una etiqueta <p>...</p>
+        -->
+        <p>
+          Siempre te regalé cosas que miraban hacia atrás — recuerdos, momentos que ya vivimos, fotos de lo que fuimos.
+        </p>
+        <p>
+          Esta vez quiero hacer algo diferente. Quiero regalarte el futuro.
+        </p>
+        <p>
+          Adentro de este cofre vas a encontrar cosas que todavía no pasaron, experiencias que vamos a vivir, promesas que voy a cumplir. Algunas ya están listas, otras van a aparecer cuando llegue su momento.
+        </p>
+        <p>
+          Porque el mejor regalo que te puedo dar no es algo que ya pasó, sino todo lo que todavía nos falta vivir juntos.
+        </p>
+        <p>
+          Pero primero… tenés que ganártelo. 😏
+        </p>
+        <!-- ✏️ CAMBIÁ "Con todo mi amor" por lo que quieras firmar -->
+        <p class="carta-firma">— Con todo mi amor ❤️</p>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-primary" onclick="nextChallenge(1)">Lista para el desafío →</button>
+      </div>
+    </div>
+
+    <!-- ── DESAFÍO 2: QUIZ ── -->
+    <div id="challenge-1" class="tab-content">
+      <p class="section-tag">Desafío 1 de 2</p>
+      <h2 class="section-title">¿Cuánto me conocés?</h2>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress" style="width: 0%"></div>
+      </div>
+      <!-- Las preguntas se renderizan desde script.js -->
+      <div id="quiz-container"></div>
+    </div>
+
+    <!-- ── DESAFÍO 3: MINIJUEGO ── -->
+    <div id="challenge-2" class="tab-content">
+      <p class="section-tag">Desafío 2 de 2</p>
+      <h2 class="section-title">Ordená nuestros momentos</h2>
+      <p class="text-muted" style="margin-bottom:1.2rem">
+        Poné estas fotos en orden cronológico, de la más antigua a la más reciente. Arrastralas hasta que queden bien.
+      </p>
+      <!-- Las fotos se renderizan desde script.js -->
+      <div class="photo-sort-area" id="sort-area"></div>
+      <button class="btn btn-secondary" onclick="checkOrder()" id="btn-check-order">Verificar orden</button>
+      <div id="order-feedback" class="quiz-feedback mt-1"></div>
+    </div>
+
+    <!-- ── CONTRASEÑA REVELADA ── -->
+    <div id="challenge-done" class="tab-content">
+      <p class="section-tag">¡Lo lograste!</p>
+      <h2 class="section-title">Tu contraseña</h2>
+      <div class="password-reveal">
+        <p>Usá esta contraseña para abrir el cofre:</p>
+        <div class="password-code" id="revealed-password"></div>
+        <p style="font-size:0.8rem; opacity:0.5">Guardala, la vas a necesitar.</p>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-gold" onclick="goToGifts()">Abrir el cofre 🎁</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PANTALLA 3 — CONTRASEÑA
+══════════════════════════════════════ -->
+<div id="screen-password" class="screen">
+  <div class="password-gate">
+    <div class="lock-icon">🔐</div>
+    <h2>El cofre de regalos</h2>
+    <p>Ingresá la contraseña que ganaste para abrir tus regalos.</p>
+    <div class="password-input-wrap">
+      <input
+        type="text"
+        id="main-password-input"
+        placeholder="contraseña"
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter') checkMainPassword()"
+      >
+      <button class="btn btn-primary" onclick="checkMainPassword()">Abrir</button>
+    </div>
+    <p class="password-error" id="main-password-error">Contraseña incorrecta. Seguí intentando 💪</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PANTALLA 4 — REGALOS
+══════════════════════════════════════ -->
+<div id="screen-gifts" class="screen">
+  <div class="gifts-header">
+    <h1>Tu cofre de regalos ✨</h1>
+    <button
+      class="btn btn-secondary"
+      style="padding:0.4rem 1rem;font-size:0.85rem;border-color:rgba(255,255,255,0.3);color:#fff"
+      onclick="goTo('screen-password')"
+    >Volver</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('tab-gifts', this)">Regalos</button>
+    <button class="nav-tab" onclick="switchTab('tab-wall', this)">Muro de fotos</button>
+  </div>
+
+  <div class="gifts-body">
+
+    <!-- TAB: REGALOS -->
+    <div id="tab-gifts" class="tab-content active">
+      <p class="gifts-intro">
+        Algunos regalos ya están listos para vos. Otros van a aparecer con el tiempo, cuando llegue el momento indicado. Cada uno tiene una pista de lo que viene.
+      </p>
+      <!-- Los regalos se renderizan desde script.js -->
+      <div class="gifts-grid" id="gifts-grid"></div>
+    </div>
+
+    <!-- TAB: MURO DE FOTOS -->
+    <div id="tab-wall" class="tab-content">
+      <div class="wall-section">
+        <h2 class="wall-title">Nuestro muro</h2>
+        <p class="wall-subtitle">Cada vez que cumplamos un regalo, sumamos una foto acá. Por ahora está vacío — pero eso va a cambiar.</p>
+        <!-- Las fotos se renderizan desde script.js -->
+        <div class="wall-grid" id="wall-grid"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
