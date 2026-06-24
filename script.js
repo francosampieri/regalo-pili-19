@@ -6,7 +6,7 @@
 const MAIN_PASSWORD = "futuro"; // ← cambiá esto
 
 // 🤖 API Key de Google Gemini (gratis en aistudio.google.com)
-const GEMINI_API_KEY = "AQ.Ab8RN6L7gvS-LZFOpB7BeO2gve-puaE_jsGSrvUed5K8oFBvCg"; // ← pegá tu key acá
+const GEMINI_API_KEY = "TU_API_KEY_ACÁ"; // ← pegá tu key acá
 
 // ──────────────────────────────────────────────────────────
 // 🖼️ DESAFÍO 1 — Imagen IA + texto
@@ -61,27 +61,27 @@ const FUTURO_QUESTIONS = [
   {
     id: "mascota",
     pregunta: "¿Qué mascota vamos a tener?",
-    opciones: ["🐶 Perro", "🐱 Gato", "🐶🐱 Los dos", "🐠 Algo más tranquilo"]
+    placeholder: "Un perro, dos gatos, una tortuga..."
   },
   {
     id: "hijos",
     pregunta: "¿Cuántos hijos vamos a tener?",
-    opciones: ["👶 Uno", "👶👶 Dos", "👶👶👶 Tres o más", "🙅 Ninguno, solo nosotros"]
+    placeholder: "Dos, ninguno, los que vengan..."
   },
   {
     id: "donde",
     pregunta: "¿Dónde vamos a vivir?",
-    opciones: ["🏙️ En Mendoza siempre", "🌍 Afuera del país", "🏡 En algún lugar tranquilo", "🤷 No tengo idea"]
+    placeholder: "En Mendoza, afuera del país, en el campo..."
   },
   {
     id: "trabajo",
     pregunta: "¿A qué te vas a dedicar?",
-    opciones: ["💼 Algo que ya sé", "🎨 Algo creativo", "🚀 Mi propio negocio", "🌟 Algo que todavía no existe"]
+    placeholder: "Tu trabajo soñado..."
   },
   {
     id: "vacaciones",
     pregunta: "¿Cómo son nuestras vacaciones ideales?",
-    opciones: ["🏖️ Playa y descanso total", "🏔️ Aventura y montaña", "🏛️ Ciudades y cultura", "🎲 Sorpresa, siempre algo diferente"]
+    placeholder: "Playa, montaña, ciudad, todo..."
   }
 ];
 
@@ -271,25 +271,41 @@ function renderFuturoQuestion(index) {
     <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
     <p class="quiz-counter">Pregunta ${index + 1} de ${FUTURO_QUESTIONS.length}</p>
     <p class="quiz-question">${q.pregunta}</p>
-    <div class="options" id="futuro-options"></div>
+    <div class="futuro-input-wrap">
+      <input
+        type="text"
+        class="futuro-input"
+        id="futuro-input-${index}"
+        placeholder="${q.placeholder || 'Escribí lo que quieras...'}"
+        autocomplete="off"
+      >
+      <button class="btn btn-primary" id="futuro-btn" style="margin-top:0.8rem;width:100%" onclick="submitFuturo('${q.id}', ${index})">
+        Siguiente →
+      </button>
+    </div>
+    <p class="futuro-input-error" id="futuro-error" style="display:none;color:#a32d2d;font-size:0.85rem;margin-top:0.4rem">
+      Escribí algo antes de continuar 😊
+    </p>
   `;
 
-  // Usar addEventListener para evitar problemas con comillas en el HTML
-  const optionsDiv = document.getElementById('futuro-options');
-  q.opciones.forEach((opt) => {
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.textContent = opt;
-    div.addEventListener('click', () => selectFuturo(q.id, opt, index + 1));
-    optionsDiv.appendChild(div);
+  // Foco automático y envío con Enter
+  const input = document.getElementById('futuro-input-' + index);
+  input.focus();
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitFuturo(q.id, index);
   });
 }
 
-function selectFuturo(id, value, nextIndex) {
-  futuroAnswers[id] = value;
-  // Animación de selección
-  document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
-  setTimeout(() => renderFuturoQuestion(nextIndex), 400);
+function submitFuturo(id, index) {
+  const input = document.getElementById('futuro-input-' + index);
+  const val = input.value.trim();
+  if (!val) {
+    document.getElementById('futuro-error').style.display = 'block';
+    input.focus();
+    return;
+  }
+  futuroAnswers[id] = val;
+  renderFuturoQuestion(index + 1);
 }
 
 function renderFuturoLoading() {
@@ -315,7 +331,7 @@ El texto tiene que ser cálido, esperanzador, un poco poético, y usar referenci
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
