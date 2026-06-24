@@ -6,7 +6,7 @@
 const MAIN_PASSWORD = "futuro"; // ← cambiá esto
 
 // 🤖 API Key de Google Gemini (gratis en aistudio.google.com)
-const GEMINI_API_KEY = "AQ.Ab8RN6K6mKmiAFs-RyEUrokcaEKBYA1A6ZOU0rRmomufaXXo-g"; // ← pegá tu key acá
+const GEMINI_API_KEY = "AQ.Ab8RN6I2sY1ofjNGAzMWlWmxO_hy3QCgvti8RaqCAMxifmgz7Q"; // ← pegá tu key acá
 
 // ──────────────────────────────────────────────────────────
 // 🖼️ DESAFÍO 1 — Imagen IA + texto
