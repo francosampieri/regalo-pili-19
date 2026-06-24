@@ -6,7 +6,7 @@
 const MAIN_PASSWORD = "futuro"; // ← cambiá esto
 
 // 🤖 API Key de Google Gemini (gratis en aistudio.google.com)
-const GEMINI_API_KEY = "AQ.Ab8RN6K1uTSAo0Jqo2r0OPSFkBuu1Wb0Q66eM0cYBOeIo9LCvw"; // ← pegá tu key acá
+const GEMINI_API_KEY = "TU_API_KEY_ACÁ"; // ← pegá tu key acá
 
 // ──────────────────────────────────────────────────────────
 // 🖼️ DESAFÍO 1 — Imagen IA + texto
@@ -259,7 +259,6 @@ function initFuturo() {
 function renderFuturoQuestion(index) {
   const container = document.getElementById('futuro-container');
   if (index >= FUTURO_QUESTIONS.length) {
-    // Todas respondidas → llamar a la IA
     renderFuturoLoading();
     callGemini();
     return;
@@ -272,12 +271,18 @@ function renderFuturoQuestion(index) {
     <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
     <p class="quiz-counter">Pregunta ${index + 1} de ${FUTURO_QUESTIONS.length}</p>
     <p class="quiz-question">${q.pregunta}</p>
-    <div class="options">
-      ${q.opciones.map((opt, i) => `
-        <div class="option" onclick="selectFuturo('${q.id}', ${JSON.stringify(opt)}, ${index + 1})">${opt}</div>
-      `).join('')}
-    </div>
+    <div class="options" id="futuro-options"></div>
   `;
+
+  // Usar addEventListener para evitar problemas con comillas en el HTML
+  const optionsDiv = document.getElementById('futuro-options');
+  q.opciones.forEach((opt) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.textContent = opt;
+    div.addEventListener('click', () => selectFuturo(q.id, opt, index + 1));
+    optionsDiv.appendChild(div);
+  });
 }
 
 function selectFuturo(id, value, nextIndex) {
