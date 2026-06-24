@@ -446,4 +446,20 @@ function switchTab(tabId, btn) {
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
   initQuiz();
+
+  try {
+    const giftsUnlocked = localStorage.getItem('gifts_unlocked') === '1';
+    const challengesDone = localStorage.getItem('challenges_done') === '1';
+
+    if (giftsUnlocked) {
+      // Ya entró antes a los regalos → entra directo sin pedir contraseña
+      goTo('screen-gifts');
+      renderGifts();
+      renderWall();
+    } else if (challengesDone) {
+      // Completó los desafíos pero todavía no entró → va a la pantalla de contraseña
+      goTo('screen-password');
+    }
+    // Si no hay nada guardado → muestra la portada normalmente
+  } catch(e) {}
 });
