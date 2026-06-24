@@ -2,76 +2,106 @@
 //  CONFIGURACIÓN ← TODO LO QUE TENÉS QUE EDITAR ESTÁ ACÁ
 // ══════════════════════════════════════════════════════════
 
-// 🔑 Contraseña principal para abrir el cofre
+// 🔑 Contraseña para entrar a los regalos
 const MAIN_PASSWORD = "futuro"; // ← cambiá esto
 
+// 🤖 API Key de Google Gemini (gratis en aistudio.google.com)
+const GEMINI_API_KEY = "AQ.Ab8RN6K1uTSAo0Jqo2r0OPSFkBuu1Wb0Q66eM0cYBOeIo9LCvw"; // ← pegá tu key acá
+
 // ──────────────────────────────────────────────────────────
-// 📝 PREGUNTAS DEL QUIZ
-// correct: índice de la respuesta correcta (0 = primera opción)
+// 🖼️ DESAFÍO 1 — Imagen IA + texto
+// src: ruta a la imagen generada con IA (ej: "fotos/punta-cana.jpg")
+// texto: lo que aparece debajo de la imagen
 // ──────────────────────────────────────────────────────────
-const QUIZ_QUESTIONS = [
+const DESAFIO_IMAGEN = {
+  src: null, // ← reemplazá con "fotos/punta-cana.jpg" cuando tengas la imagen
+  titulo: "Punta Cana, 2027",
+  texto: `Este lugar todavía no existe en nuestra historia. Pero va a existir.
+Hace tiempo que hablamos de este viaje, de caminar juntos por esa playa, de ese atardecer que todavía no vimos pero que ya siento como nuestro.
+No sé exactamente cuándo va a pasar. Pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento — vos, leyendo esto, sin saber todavía todo lo que nos espera.`
+};
+
+// ──────────────────────────────────────────────────────────
+// ✅ DESAFÍO 2 — To Do List del futuro
+// Cada item tiene un emoji, un texto, y opcionalmente una fecha aproximada
+// ──────────────────────────────────────────────────────────
+const TODO_ITEMS = [
+  { emoji: "✈️", texto: "Viajar juntos por primera vez solos", fecha: "2027" },
+  { emoji: "🏖️", texto: "Ver un atardecer en el mar", fecha: null },
+  { emoji: "🍝", texto: "Cocinar algo complicado y que salga bien (o mal)", fecha: null },
+  { emoji: "🎬", texto: "Hacer una noche de películas con cine en casa de verdad", fecha: null },
+  { emoji: "🏕️", texto: "Acampar bajo las estrellas", fecha: null },
+  { emoji: "🎂", texto: "Sorprenderte en tu cumpleaños de una forma que no esperás", fecha: "cada año" },
+  { emoji: "📸", texto: "Tener una sesión de fotos juntos", fecha: null },
+  { emoji: "🌍", texto: "Perdernos en una ciudad que no conocemos ninguno de los dos", fecha: null },
+];
+
+// ──────────────────────────────────────────────────────────
+// 📝 DESAFÍO 3 — Carta para el futuro
+// Se muestra entre el To Do y el minijuego
+// ──────────────────────────────────────────────────────────
+const CARTA_FUTURO = {
+  titulo: "Para vos, en 5 años",
+  subtitulo: "22 de junio de 2031",
+  parrafos: [
+    "Hola. Espero que estés bien. Espero que estemos bien.",
+    "Cuando escribí esto, todavía éramos dos personas tratando de entender qué quería decir construir algo juntos. No sabíamos exactamente a dónde íbamos, pero sabíamos que queríamos ir al mismo lugar.",
+    "Imagino que a esta altura ya cumplimos un montón de las cosas de esa lista. Imagino que viajamos, que nos peleamos y nos arreglamos, que nos sorprendimos el uno al otro más de una vez.",
+    "Lo que sí sé con certeza es esto: elegirte fue la mejor decisión que tomé. Y si en este momento, leyendo esto, todavía sentís algo parecido a lo que yo siento hoy — entonces lo logramos.",
+    "Con todo mi amor, siempre."
+  ],
+  firma: "— El vos del pasado ❤️"
+};
+
+// ──────────────────────────────────────────────────────────
+// 🎮 DESAFÍO 4 — Minijuego: construí nuestro futuro
+// Preguntas con opciones, al final la IA genera el texto
+// ──────────────────────────────────────────────────────────
+const FUTURO_QUESTIONS = [
   {
-    question: "¿En qué lugar nos conocimos?",
-    options: ["En la facultad", "Por Instagram", "En una fiesta", "Por amigos en común"],
-    correct: 0,
-    feedback_correct: "¡Exacto! 🥰",
-    feedback_wrong: "Casi… acordate mejor."
+    id: "mascota",
+    pregunta: "¿Qué mascota vamos a tener?",
+    opciones: ["🐶 Perro", "🐱 Gato", "🐶🐱 Los dos", "🐠 Algo más tranquilo"]
   },
   {
-    question: "¿Cuál es mi canción favorita de todos los tiempos?",
-    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
-    correct: 0,
-    feedback_correct: "Bien! ✨",
-    feedback_wrong: "Hmm, no era esa."
+    id: "hijos",
+    pregunta: "¿Cuántos hijos vamos a tener?",
+    opciones: ["👶 Uno", "👶👶 Dos", "👶👶👶 Tres o más", "🙅 Ninguno, solo nosotros"]
   },
   {
-    question: "¿Cuál fue el primer lugar al que fuimos juntos?",
-    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
-    correct: 0,
-    feedback_correct: "Sí! Lo recordás 💫",
-    feedback_wrong: "No, esa no fue."
+    id: "donde",
+    pregunta: "¿Dónde vamos a vivir?",
+    opciones: ["🏙️ En Mendoza siempre", "🌍 Afuera del país", "🏡 En algún lugar tranquilo", "🤷 No tengo idea"]
   },
   {
-    question: "¿Cuándo fue nuestra primera cita?",
-    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
-    correct: 0,
-    feedback_correct: "¡Claro que sí! 🌸",
-    feedback_wrong: "Fijate bien en el calendario."
+    id: "trabajo",
+    pregunta: "¿A qué te vas a dedicar?",
+    opciones: ["💼 Algo que ya sé", "🎨 Algo creativo", "🚀 Mi propio negocio", "🌟 Algo que todavía no existe"]
   },
   {
-    question: "¿Cuál es mi comida favorita?",
-    options: ["Opción A", "Opción B", "Opción C", "Opción D"],
-    correct: 0,
-    feedback_correct: "Me conocés bien 😊",
-    feedback_wrong: "¡Me conocés poco!"
+    id: "vacaciones",
+    pregunta: "¿Cómo son nuestras vacaciones ideales?",
+    opciones: ["🏖️ Playa y descanso total", "🏔️ Aventura y montaña", "🏛️ Ciudades y cultura", "🎲 Sorpresa, siempre algo diferente"]
   }
 ];
 
 // ──────────────────────────────────────────────────────────
-// 📸 FOTOS DEL MINIJUEGO
-// El orden correcto es el orden en que las ponés acá (índice 0 = más antigua)
-// src: ruta a la foto (ej: "fotos/foto1.jpg") o null para placeholder
-// label: nombre del momento que aparece en la tarjeta
-// hint: pista para ayudarla a ordenarlas
+// 🔒 DESAFÍO 5 — Sobre sellado
+// Se desbloquea el 22 de junio de 2027
+// contenido: lo que aparece cuando se abra (podés completarlo después)
 // ──────────────────────────────────────────────────────────
-const SORT_PHOTOS = [
-  { src: null, label: "📷 Foto 1", hint: "Pista del primer momento" },
-  { src: null, label: "📷 Foto 2", hint: "Pista del segundo momento" },
-  { src: null, label: "📷 Foto 3", hint: "Pista del tercer momento" },
-  { src: null, label: "📷 Foto 4", hint: "Pista del cuarto momento" },
-  { src: null, label: "📷 Foto 5", hint: "Pista del quinto momento" }
-];
+const SOBRE_SELLADO = {
+  unlockDate: "2027-06-22",
+  contenido: `
+    <p>Si estás leyendo esto, pasó un año entero desde que te di este regalo.</p>
+    <p>Acá va a ir algo especial — todavía lo estoy pensando. Pero cuando llegue el momento, va a valer la pena haber esperado.</p>
+  `
+  // ← Completá esto cuando falte poco para la fecha
+};
 
 // ──────────────────────────────────────────────────────────
 // 🎁 REGALOS
-//
-// Tipos disponibles:
-//   "available"  → ya disponible, se ve el contenido
-//   "date"       → se desbloquea en una fecha (formato "YYYY-MM-DD")
-//   "password"   → se desbloquea con una contraseña secreta que vos le das
-//   "surprise"   → bloqueado hasta que vos lo cambies a "available"
-//
-// content: el HTML que aparece cuando se desbloquea (podés poner texto, links, etc)
+// Tipos: "available", "date", "password", "surprise"
 // ──────────────────────────────────────────────────────────
 const GIFTS = [
   {
@@ -79,26 +109,24 @@ const GIFTS = [
     type: "available",
     icon: "💌",
     name: "El primer regalo",
-    hint: "Esto es tuyo desde hoy. No necesitás esperar nada.",
-    content: `
-      <p>Acá va el texto de tu primer regalo. Puede ser una carta, una promesa, una playlist, lo que quieras.</p>
-    `
+    hint: "Esto es tuyo desde hoy.",
+    content: `<p>Acá va el contenido del primer regalo inmediato — completar.</p>`
   },
   {
     id: "gift-2",
     type: "date",
     icon: "🏔️",
     name: "El escape perfecto",
-    hint: "Un fin de semana para los dos, lejos de todo. Las montañas nos esperan.",
+    hint: "Un fin de semana para los dos, lejos de todo.",
     unlockDate: "2025-12-21",
-    content: `<p>Descripción del regalo de Potrerillos o Chacras — completar cuando toque.</p>`
+    content: `<p>Descripción de la escapada — completar cuando toque.</p>`
   },
   {
     id: "gift-3",
     type: "password",
     icon: "🍽️",
     name: "Una noche especial",
-    hint: "Cuando yo te diga que es el momento, te voy a dar la clave.",
+    hint: "Cuando yo te diga, te paso la clave.",
     unlockPassword: "cena2025",
     content: `<p>Descripción de la cena sorpresa — completar cuando toque.</p>`
   },
@@ -107,24 +135,23 @@ const GIFTS = [
     type: "date",
     icon: "☀️",
     name: "El regalo del verano",
-    hint: "Cuando llegue el calor, va a aparecer algo para los dos.",
+    hint: "Cuando llegue el calor, aparece algo para los dos.",
     unlockDate: "2025-12-21",
-    content: `<p>Contenido del regalo de verano — completar cuando toque.</p>`
+    content: `<p>Contenido del regalo de verano — completar.</p>`
   },
   {
     id: "gift-5",
     type: "surprise",
     icon: "🎊",
     name: "???",
-    hint: "Este se va a desbloquear solo. No sé cuándo. Esperalo."
-    // Cuando quieras desbloquearlo: cambiá type a "available" y agregá content
+    hint: "Este se desbloquea solo. No sé cuándo. Esperalo."
   },
   {
     id: "gift-6",
     type: "date",
     icon: "🌸",
     name: "Regalo por definir",
-    hint: "Algo lindo está en camino. Todavía lo estoy armando.",
+    hint: "Algo lindo está en camino.",
     unlockDate: "2026-03-20",
     content: `<p>Contenido por definir.</p>`
   }
@@ -132,188 +159,262 @@ const GIFTS = [
 
 // ──────────────────────────────────────────────────────────
 // 📸 MURO DE FOTOS
-// Empezá con el array vacío. Cuando cumplan un regalo,
-// agregá una entrada acá y volvé a subir el archivo.
-//
-// Formato de cada foto:
-//   { src: "fotos/nombre.jpg", caption: "Lo que quieras escribir", date: "enero 2026" }
+// Agregá una entrada cada vez que cumplan un regalo
+// { src: "fotos/foto.jpg", caption: "Texto", date: "enero 2026" }
 // ──────────────────────────────────────────────────────────
 const WALL_PHOTOS = [
-  // Ejemplo (descomentá y completá cuando tengas fotos):
-  // { src: "fotos/foto1.jpg", caption: "La primera vez que lo cumplimos ✨", date: "enero 2026" },
+  // { src: "fotos/foto1.jpg", caption: "Primera vez que lo cumplimos ✨", date: "enero 2026" },
 ];
 
 
 // ══════════════════════════════════════════════════════════
-//  LÓGICA — no necesitás tocar nada de acá para abajo
+//  LÓGICA — no toques nada de acá para abajo
 // ══════════════════════════════════════════════════════════
 
-let quizIndex = 0;
-let quizAnswered = false;
-let sortOrder = [];
-let correctSortOrder = [];
+// Estado de los desafíos
+let currentStep = 0;
+const TOTAL_STEPS = 5;
+let futuroAnswers = {};
 let dragSrcIndex = null;
 
-// ── NAVEGACIÓN ──
+// ── NAVEGACIÓN ENTRE PANTALLAS ──
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-function goToGifts() {
-  goTo('screen-password');
+// ── NAVEGACIÓN ENTRE PASOS DE DESAFÍOS ──
+function goToStep(n) {
+  document.querySelectorAll('.challenge-step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step-' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+  updateDots();
+  window.scrollTo(0, 0);
+
+  // Inicializar pasos especiales
+  if (n === 4) initSobre();
 }
 
-function nextChallenge(n) {
-  document.querySelectorAll('#screen-challenges .tab-content').forEach(t => t.classList.remove('active'));
+function updateDots() {
   document.querySelectorAll('.dot').forEach((d, i) => {
     d.classList.remove('active', 'done');
-    if (i < n) d.classList.add('done');
-    if (i === n) d.classList.add('active');
+    if (i < currentStep) d.classList.add('done');
+    if (i === currentStep) d.classList.add('active');
   });
-  const el = document.getElementById('challenge-' + n) || document.getElementById('challenge-done');
-  if (el) el.classList.add('active');
-  window.scrollTo(0, 0);
-  if (n === 2) initSortGame();
 }
 
-function showPasswordReveal() {
-  try { localStorage.setItem('challenges_done', '1'); } catch(e) {}
-  document.querySelectorAll('#screen-challenges .tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.dot').forEach(d => { d.classList.remove('active'); d.classList.add('done'); });
-  document.getElementById('challenge-done').classList.add('active');
-  document.getElementById('revealed-password').textContent = MAIN_PASSWORD;
-  window.scrollTo(0, 0);
-}
+// ── PASO 0: IMAGEN IA ──
+function initImagen() {
+  const container = document.getElementById('imagen-container');
+  const img = DESAFIO_IMAGEN.src
+    ? `<img src="${DESAFIO_IMAGEN.src}" alt="${DESAFIO_IMAGEN.titulo}" style="width:100%;border-radius:12px;margin-bottom:1.2rem;display:block;">`
+    : `<div style="width:100%;aspect-ratio:16/9;background:var(--rose-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;color:var(--rose);font-size:3rem;">🏖️</div>`;
 
-// ── QUIZ ──
-function initQuiz() {
-  quizIndex = 0;
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = QUIZ_QUESTIONS[quizIndex];
-  const pct = (quizIndex / QUIZ_QUESTIONS.length) * 100;
-  document.getElementById('quiz-progress').style.width = pct + '%';
-  quizAnswered = false;
-
-  document.getElementById('quiz-container').innerHTML = `
-    <p class="quiz-counter">Pregunta ${quizIndex + 1} de ${QUIZ_QUESTIONS.length}</p>
-    <p class="quiz-question">${q.question}</p>
-    <div class="options">
-      ${q.options.map((opt, i) => `
-        <div class="option" onclick="selectOption(${i})" id="opt-${i}">${opt}</div>
-      `).join('')}
-    </div>
-    <div class="quiz-feedback" id="quiz-feedback"></div>
+  container.innerHTML = `
+    ${img}
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.8rem;color:var(--ink)">${DESAFIO_IMAGEN.titulo}</h3>
+    ${DESAFIO_IMAGEN.texto.split('\n').map(p => p.trim() ? `<p style="font-size:0.95rem;line-height:1.8;color:var(--ink-soft);margin-bottom:0.8rem">${p.trim()}</p>` : '').join('')}
   `;
 }
 
-function selectOption(index) {
-  if (quizAnswered) return;
-  quizAnswered = true;
-  const q = QUIZ_QUESTIONS[quizIndex];
-  const feedback = document.getElementById('quiz-feedback');
-  const opts = document.querySelectorAll('.option');
-
-  opts[q.correct].classList.add('correct');
-  if (index !== q.correct) opts[index].classList.add('wrong');
-
-  feedback.textContent = index === q.correct ? q.feedback_correct : q.feedback_wrong;
-  feedback.className = 'quiz-feedback ' + (index === q.correct ? 'correct' : 'wrong');
-
-  setTimeout(() => {
-    quizIndex++;
-    if (quizIndex < QUIZ_QUESTIONS.length) {
-      renderQuestion();
-    } else {
-      document.getElementById('quiz-progress').style.width = '100%';
-      document.getElementById('quiz-container').innerHTML = `
-        <div class="password-reveal" style="margin-top:1rem;">
-          <p>¡Pasaste el quiz! 🎉</p>
-          <p style="font-size:0.85rem;opacity:0.6;margin-bottom:1.2rem">Ahora viene el último desafío.</p>
-        </div>
-        <div class="mt-3 text-center">
-          <button class="btn btn-primary" onclick="nextChallenge(2)">Siguiente desafío →</button>
-        </div>
-      `;
-    }
-  }, 1200);
+// ── PASO 1: TODO LIST ──
+function initTodo() {
+  const container = document.getElementById('todo-container');
+  container.innerHTML = TODO_ITEMS.map((item, i) => `
+    <div class="todo-item" id="todo-${i}" onclick="toggleTodo(${i})">
+      <span class="todo-check">○</span>
+      <span class="todo-emoji">${item.emoji}</span>
+      <span class="todo-text">${item.texto}${item.fecha ? `<span class="todo-fecha"> — ${item.fecha}</span>` : ''}</span>
+    </div>
+  `).join('');
 }
 
-// ── MINIJUEGO ──
-function initSortGame() {
-  correctSortOrder = SORT_PHOTOS.map((_, i) => i);
-  sortOrder = [...correctSortOrder].sort(() => Math.random() - 0.5);
-  renderSortArea();
+function toggleTodo(i) {
+  const item = document.getElementById('todo-' + i);
+  item.classList.toggle('checked');
+  const check = item.querySelector('.todo-check');
+  check.textContent = item.classList.contains('checked') ? '✓' : '○';
 }
 
-function renderSortArea() {
-  const area = document.getElementById('sort-area');
-  area.innerHTML = '';
-  sortOrder.forEach((photoIdx, position) => {
-    const p = SORT_PHOTOS[photoIdx];
-    const div = document.createElement('div');
-    div.className = 'sort-photo';
-    div.draggable = true;
-    div.dataset.index = photoIdx;
-    div.dataset.position = position;
-    div.innerHTML = `
-      ${p.src ? `<img src="${p.src}" alt="${p.label}">` : `<div class="sort-photo-placeholder">📷</div>`}
-      <div class="sort-photo-info">
-        <div class="sort-photo-label">${p.label}</div>
-        <div class="sort-photo-hint">${p.hint}</div>
-      </div>
-      <span class="drag-handle">⠿</span>
-    `;
-    div.addEventListener('dragstart', onDragStart);
-    div.addEventListener('dragover', onDragOver);
-    div.addEventListener('drop', onDrop);
-    div.addEventListener('dragend', onDragEnd);
-    area.appendChild(div);
-  });
-  const fb = document.getElementById('order-feedback');
-  fb.className = 'quiz-feedback';
-  fb.style.display = 'none';
+// ── PASO 2: CARTA FUTURO ──
+function initCarta() {
+  const container = document.getElementById('carta-container');
+  container.innerHTML = `
+    <div class="carta-paper">
+      <p style="font-size:0.8rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">${CARTA_FUTURO.subtitulo}</p>
+      ${CARTA_FUTURO.parrafos.map(p => `<p>${p}</p>`).join('')}
+      <p class="carta-firma">${CARTA_FUTURO.firma}</p>
+    </div>
+  `;
 }
 
-function onDragStart(e) {
-  dragSrcIndex = parseInt(e.currentTarget.dataset.position);
-  e.currentTarget.classList.add('dragging');
-}
-function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
-function onDragOver(e) {
-  e.preventDefault();
-  document.querySelectorAll('.sort-photo').forEach(el => el.classList.remove('drag-over'));
-  e.currentTarget.classList.add('drag-over');
-}
-function onDrop(e) {
-  e.preventDefault();
-  const targetIndex = parseInt(e.currentTarget.dataset.position);
-  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
-  const tmp = sortOrder[dragSrcIndex];
-  sortOrder[dragSrcIndex] = sortOrder[targetIndex];
-  sortOrder[targetIndex] = tmp;
-  dragSrcIndex = null;
-  renderSortArea();
+// ── PASO 3: MINIJUEGO FUTURO CON IA ──
+function initFuturo() {
+  futuroAnswers = {};
+  renderFuturoQuestion(0);
 }
 
-function checkOrder() {
-  const correct = sortOrder.every((v, i) => v === correctSortOrder[i]);
-  const fb = document.getElementById('order-feedback');
-  if (correct) {
-    fb.textContent = '¡Perfecto! Las ordenaste correctamente 🎉';
-    fb.className = 'quiz-feedback correct';
-    fb.style.display = 'block';
-    document.getElementById('btn-check-order').style.display = 'none';
-    setTimeout(() => showPasswordReveal(), 1500);
-  } else {
-    fb.textContent = 'Ese no es el orden… intentá de nuevo 🤔';
-    fb.className = 'quiz-feedback wrong';
-    fb.style.display = 'block';
+function renderFuturoQuestion(index) {
+  const container = document.getElementById('futuro-container');
+  if (index >= FUTURO_QUESTIONS.length) {
+    // Todas respondidas → llamar a la IA
+    renderFuturoLoading();
+    callGemini();
+    return;
   }
+
+  const q = FUTURO_QUESTIONS[index];
+  const pct = (index / FUTURO_QUESTIONS.length) * 100;
+
+  container.innerHTML = `
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+    <p class="quiz-counter">Pregunta ${index + 1} de ${FUTURO_QUESTIONS.length}</p>
+    <p class="quiz-question">${q.pregunta}</p>
+    <div class="options">
+      ${q.opciones.map((opt, i) => `
+        <div class="option" onclick="selectFuturo('${q.id}', ${JSON.stringify(opt)}, ${index + 1})">${opt}</div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function selectFuturo(id, value, nextIndex) {
+  futuroAnswers[id] = value;
+  // Animación de selección
+  document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
+  setTimeout(() => renderFuturoQuestion(nextIndex), 400);
+}
+
+function renderFuturoLoading() {
+  document.getElementById('futuro-container').innerHTML = `
+    <div style="text-align:center;padding:3rem 1rem">
+      <div class="ai-spinner"></div>
+      <p style="color:var(--ink-soft);margin-top:1rem;font-size:0.95rem">La IA está construyendo su futuro...</p>
+    </div>
+  `;
+}
+
+async function callGemini() {
+  const answers = futuroAnswers;
+  const prompt = `Sos un asistente romántico y creativo. Escribí un texto corto y emotivo (4-5 párrafos) en segunda persona ("vas a", "van a") describiendo cómo va a ser el futuro de una pareja joven de Argentina, basándote en estas respuestas que ella dio:
+
+- Mascota: ${answers.mascota || 'no especificó'}
+- Hijos: ${answers.hijos || 'no especificó'}  
+- Dónde van a vivir: ${answers.donde || 'no especificó'}
+- Trabajo de ella: ${answers.trabajo || 'no especificó'}
+- Vacaciones ideales: ${answers.vacaciones || 'no especificó'}
+
+El texto tiene que ser cálido, esperanzador, un poco poético, y usar referencias concretas a las respuestas. Escribilo como si fuera una visión del futuro que le estás mostrando. Usá español argentino natural. No uses asteriscos ni formato markdown, solo párrafos de texto plano separados por saltos de línea.`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      }
+    );
+
+    const data = await response.json();
+    const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    if (!texto) throw new Error('Respuesta vacía');
+
+    renderFuturoResult(texto);
+  } catch (err) {
+    document.getElementById('futuro-container').innerHTML = `
+      <div class="quiz-feedback wrong" style="display:block">
+        Hubo un error conectando con la IA. Revisá la API key en script.js.
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-secondary" onclick="initFuturo()">Reintentar</button>
+      </div>
+    `;
+  }
+}
+
+function renderFuturoResult(texto) {
+  const parrafos = texto.split('\n').filter(p => p.trim());
+  document.getElementById('futuro-container').innerHTML = `
+    <div class="carta-paper" style="margin-bottom:1.5rem">
+      <p style="font-size:0.75rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Tu futuro, según la IA ✨</p>
+      ${parrafos.map(p => `<p style="font-size:0.95rem">${p}</p>`).join('')}
+    </div>
+    <div class="text-center">
+      <button class="btn btn-primary" onclick="goToStep(4)">Último desafío →</button>
+    </div>
+  `;
+}
+
+// ── PASO 4: SOBRE SELLADO ──
+function initSobre() {
+  const unlockDate = new Date(SOBRE_SELLADO.unlockDate + 'T00:00:00');
+  const now = new Date();
+  const container = document.getElementById('sobre-container');
+
+  if (now >= unlockDate) {
+    // Desbloqueado
+    container.innerHTML = `
+      <div class="sobre-card sobre-open">
+        <div style="font-size:3rem;margin-bottom:1rem">💌</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem">El sobre se abrió</h3>
+        <div class="gift-content">${SOBRE_SELLADO.contenido}</div>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-gold" onclick="finalizarDesafios()">Ir a los regalos 🎁</button>
+      </div>
+    `;
+  } else {
+    // Bloqueado con cuenta regresiva
+    container.innerHTML = `
+      <div class="sobre-card">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.5rem;color:var(--ink)">Abrí esto en un año</h3>
+        <p style="font-size:0.9rem;color:var(--ink-soft);margin-bottom:1.5rem">Este sobre está sellado hasta el ${formatDate(SOBRE_SELLADO.unlockDate)}. Vas a tener que esperar.</p>
+        <div class="countdown-grid" id="countdown-grid"></div>
+        <p style="font-size:0.8rem;color:var(--locked);margin-top:1rem">La ansiedad forma parte del regalo.</p>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-gold" onclick="finalizarDesafios()">Ir a los regalos 🎁</button>
+      </div>
+    `;
+    updateCountdown(unlockDate);
+    setInterval(() => updateCountdown(unlockDate), 1000);
+  }
+}
+
+function updateCountdown(unlockDate) {
+  const now = new Date();
+  const diff = unlockDate - now;
+  if (diff <= 0) { initSobre(); return; }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+  const grid = document.getElementById('countdown-grid');
+  if (!grid) return;
+  grid.innerHTML = [
+    { val: days, label: 'días' },
+    { val: hours, label: 'horas' },
+    { val: mins, label: 'min' },
+    { val: secs, label: 'seg' }
+  ].map(u => `
+    <div class="countdown-unit">
+      <span class="countdown-val">${String(u.val).padStart(2, '0')}</span>
+      <span class="countdown-label">${u.label}</span>
+    </div>
+  `).join('');
+}
+
+function finalizarDesafios() {
+  goTo('screen-password');
 }
 
 // ── PASSWORD GATE ──
@@ -325,7 +426,6 @@ function checkMainPassword() {
     goTo('screen-gifts');
     renderGifts();
     renderWall();
-    try { localStorage.setItem('gifts_unlocked', '1'); } catch(e) {}
   } else {
     err.style.display = 'block';
     document.getElementById('main-password-input').value = '';
@@ -373,7 +473,7 @@ function renderGifts() {
 
     } else if (gift.type === 'surprise') {
       badgeHtml = `<span class="gift-badge badge-surprise">🎲 Sorpresa</span>`;
-      extraHtml = `<p style="font-size:0.8rem;color:var(--locked);margin-top:0.5rem">Este regalo aparecerá solo cuando sea el momento.</p>`;
+      extraHtml = `<p style="font-size:0.8rem;color:var(--locked);margin-top:0.5rem">Aparece solo cuando sea el momento.</p>`;
     }
 
     const card = document.createElement('div');
@@ -445,21 +545,7 @@ function switchTab(tabId, btn) {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
-  initQuiz();
-
-  try {
-    const giftsUnlocked = localStorage.getItem('gifts_unlocked') === '1';
-    const challengesDone = localStorage.getItem('challenges_done') === '1';
-
-    if (giftsUnlocked) {
-      // Ya entró antes a los regalos → entra directo sin pedir contraseña
-      goTo('screen-gifts');
-      renderGifts();
-      renderWall();
-    } else if (challengesDone) {
-      // Completó los desafíos pero todavía no entró → va a la pantalla de contraseña
-      goTo('screen-password');
-    }
-    // Si no hay nada guardado → muestra la portada normalmente
-  } catch(e) {}
+  initImagen();
+  initTodo();
+  initCarta();
 });

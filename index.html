@@ -21,7 +21,10 @@
       Esto no es un regalo que se abre y se guarda.<br>
       Es algo que vamos a ir construyendo juntos.
     </p>
-    <button class="btn btn-primary" onclick="goTo('screen-challenges')">Empezar ✨</button>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="goTo('screen-challenges')">Comenzar los desafíos ✨</button>
+      <button class="btn btn-secondary" onclick="goTo('screen-password')">Ir a los regalos 🎁</button>
+    </div>
   </div>
 </div>
 
@@ -36,79 +39,58 @@
       <div class="dot active" id="dot-0"></div>
       <div class="dot" id="dot-1"></div>
       <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+      <div class="dot" id="dot-4"></div>
     </div>
   </div>
 
   <div class="challenge-body">
 
-    <!-- ── DESAFÍO 1: CARTA ── -->
-    <div id="challenge-0" class="tab-content active">
-      <p class="section-tag">Antes de empezar</p>
-      <h2 class="section-title">Una carta para vos</h2>
-      <div class="carta-paper">
-        <!--
-          ✏️ EDITÁ EL TEXTO DE LA CARTA ACÁ
-          Cada párrafo va dentro de una etiqueta <p>...</p>
-        -->
-        <p>
-          Siempre te regalé cosas que miraban hacia atrás — recuerdos, momentos que ya vivimos, fotos de lo que fuimos.
-        </p>
-        <p>
-          Esta vez quiero hacer algo diferente. Quiero regalarte el futuro.
-        </p>
-        <p>
-          Adentro de este cofre vas a encontrar cosas que todavía no pasaron, experiencias que vamos a vivir, promesas que voy a cumplir. Algunas ya están listas, otras van a aparecer cuando llegue su momento.
-        </p>
-        <p>
-          Porque el mejor regalo que te puedo dar no es algo que ya pasó, sino todo lo que todavía nos falta vivir juntos.
-        </p>
-        <p>
-          Pero primero… tenés que ganártelo. 😏
-        </p>
-        <!-- ✏️ CAMBIÁ "Con todo mi amor" por lo que quieras firmar -->
-        <p class="carta-firma">— Con todo mi amor ❤️</p>
-      </div>
+    <!-- ── PASO 0: IMAGEN IA ── -->
+    <div id="step-0" class="challenge-step active">
+      <p class="section-tag">Desafío 1 de 5</p>
+      <h2 class="section-title">Una imagen del futuro</h2>
+      <div id="imagen-container"></div>
       <div class="mt-3 text-center">
-        <button class="btn btn-primary" onclick="nextChallenge(1)">Lista para el desafío →</button>
+        <button class="btn btn-primary" onclick="goToStep(1)">Siguiente →</button>
       </div>
     </div>
 
-    <!-- ── DESAFÍO 2: QUIZ ── -->
-    <div id="challenge-1" class="tab-content">
-      <p class="section-tag">Desafío 1 de 2</p>
-      <h2 class="section-title">¿Cuánto me conocés?</h2>
-      <div class="quiz-progress-bar">
-        <div class="quiz-progress-fill" id="quiz-progress" style="width: 0%"></div>
-      </div>
-      <!-- Las preguntas se renderizan desde script.js -->
-      <div id="quiz-container"></div>
-    </div>
-
-    <!-- ── DESAFÍO 3: MINIJUEGO ── -->
-    <div id="challenge-2" class="tab-content">
-      <p class="section-tag">Desafío 2 de 2</p>
-      <h2 class="section-title">Ordená nuestros momentos</h2>
-      <p class="text-muted" style="margin-bottom:1.2rem">
-        Poné estas fotos en orden cronológico, de la más antigua a la más reciente. Arrastralas hasta que queden bien.
-      </p>
-      <!-- Las fotos se renderizan desde script.js -->
-      <div class="photo-sort-area" id="sort-area"></div>
-      <button class="btn btn-secondary" onclick="checkOrder()" id="btn-check-order">Verificar orden</button>
-      <div id="order-feedback" class="quiz-feedback mt-1"></div>
-    </div>
-
-    <!-- ── CONTRASEÑA REVELADA ── -->
-    <div id="challenge-done" class="tab-content">
-      <p class="section-tag">¡Lo lograste!</p>
-      <h2 class="section-title">Tu contraseña</h2>
-      <div class="password-reveal">
-        <p>Usá esta contraseña para abrir el cofre:</p>
-        <div class="password-code" id="revealed-password"></div>
-        <p style="font-size:0.8rem; opacity:0.5">Guardala, la vas a necesitar.</p>
-      </div>
+    <!-- ── PASO 1: TODO LIST ── -->
+    <div id="step-1" class="challenge-step">
+      <p class="section-tag">Desafío 2 de 5</p>
+      <h2 class="section-title">To Do ✓</h2>
+      <p class="text-muted" style="margin-bottom:1.2rem">Todo lo que nos queda por hacer. Tachá las que más ganas tenés.</p>
+      <div id="todo-container"></div>
       <div class="mt-3 text-center">
-        <button class="btn btn-gold" onclick="goToGifts()">Abrir el cofre 🎁</button>
+        <button class="btn btn-primary" onclick="goToStep(2)">Siguiente →</button>
       </div>
+    </div>
+
+    <!-- ── PASO 2: CARTA AL FUTURO ── -->
+    <div id="step-2" class="challenge-step">
+      <p class="section-tag">Desafío 3 de 5</p>
+      <!-- ✏️ CAMBIÁ EL TÍTULO SI QUERÉS -->
+      <h2 class="section-title">Para vos, en 5 años</h2>
+      <div id="carta-container"></div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-primary" onclick="goToStep(3); initFuturo()">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- ── PASO 3: MINIJUEGO IA ── -->
+    <div id="step-3" class="challenge-step">
+      <p class="section-tag">Desafío 4 de 5</p>
+      <h2 class="section-title">Construí nuestro futuro</h2>
+      <p class="text-muted" style="margin-bottom:1.2rem">Respondé estas preguntas y la IA va a imaginar cómo va a ser nuestra vida.</p>
+      <div id="futuro-container"></div>
+    </div>
+
+    <!-- ── PASO 4: SOBRE SELLADO ── -->
+    <div id="step-4" class="challenge-step">
+      <p class="section-tag">Desafío 5 de 5</p>
+      <h2 class="section-title">Abrí esto en un año</h2>
+      <div id="sobre-container"></div>
     </div>
 
   </div>
@@ -122,7 +104,7 @@
   <div class="password-gate">
     <div class="lock-icon">🔐</div>
     <h2>El cofre de regalos</h2>
-    <p>Ingresá la contraseña que ganaste para abrir tus regalos.</p>
+    <p>Ingresá la contraseña para abrir tus regalos.</p>
     <div class="password-input-wrap">
       <input
         type="text"
@@ -133,7 +115,9 @@
       >
       <button class="btn btn-primary" onclick="checkMainPassword()">Abrir</button>
     </div>
-    <p class="password-error" id="main-password-error">Contraseña incorrecta. Seguí intentando 💪</p>
+    <p class="password-error" id="main-password-error">Contraseña incorrecta 💪</p>
+    <hr class="divider">
+    <button class="btn btn-secondary" style="font-size:0.85rem" onclick="goTo('screen-challenges')">← Volver a los desafíos</button>
   </div>
 </div>
 
@@ -147,8 +131,8 @@
     <button
       class="btn btn-secondary"
       style="padding:0.4rem 1rem;font-size:0.85rem;border-color:rgba(255,255,255,0.3);color:#fff"
-      onclick="goTo('screen-password')"
-    >Volver</button>
+      onclick="goTo('screen-cover')"
+    >Inicio</button>
   </div>
 
   <div class="nav-tabs">
@@ -161,9 +145,8 @@
     <!-- TAB: REGALOS -->
     <div id="tab-gifts" class="tab-content active">
       <p class="gifts-intro">
-        Algunos regalos ya están listos para vos. Otros van a aparecer con el tiempo, cuando llegue el momento indicado. Cada uno tiene una pista de lo que viene.
+        Algunos regalos ya están listos para vos. Otros van a aparecer con el tiempo. Cada uno tiene una pista de lo que viene.
       </p>
-      <!-- Los regalos se renderizan desde script.js -->
       <div class="gifts-grid" id="gifts-grid"></div>
     </div>
 
@@ -171,8 +154,7 @@
     <div id="tab-wall" class="tab-content">
       <div class="wall-section">
         <h2 class="wall-title">Nuestro muro</h2>
-        <p class="wall-subtitle">Cada vez que cumplamos un regalo, sumamos una foto acá. Por ahora está vacío — pero eso va a cambiar.</p>
-        <!-- Las fotos se renderizan desde script.js -->
+        <p class="wall-subtitle">Cada vez que cumplamos un regalo, sumamos una foto acá.</p>
         <div class="wall-grid" id="wall-grid"></div>
       </div>
     </div>
