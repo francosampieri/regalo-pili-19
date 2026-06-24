@@ -329,13 +329,15 @@ async function callGemini() {
 
 El texto tiene que ser cálido, esperanzador, un poco poético, y usar referencias concretas a las respuestas. Escribilo como si fuera una visión del futuro que le estás mostrando. Usá español argentino natural. No uses asteriscos ni formato markdown, solo párrafos de texto plano separados por saltos de línea.`;
 
-  const response = await fetch(
+  try {
+    const response = await fetch(
   `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
   {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-goog-api-key': GEMINI_API_KEY},
+      'x-goog-api-key': GEMINI_API_KEY
+    },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }]
         })
