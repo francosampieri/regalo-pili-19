@@ -5,8 +5,7 @@
 // 🔑 Contraseña para entrar a los regalos
 const MAIN_PASSWORD = "futuro"; // ← cambiá esto
 
-// 🤖 API Key de Google Gemini (gratis en aistudio.google.com)
-const GEMINI_API_KEY = "AQ.Ab8RN6I2sY1ofjNGAzMWlWmxO_hy3QCgvti8RaqCAMxifmgz7Q"; // ← pegá tu key acá
+// 🤖 API Key — está en config.js, no acá
 
 // ──────────────────────────────────────────────────────────
 // 🖼️ DESAFÍO 1 — Imagen IA + texto
@@ -59,9 +58,9 @@ const CARTA_FUTURO = {
 // ──────────────────────────────────────────────────────────
 const FUTURO_QUESTIONS = [
   {
-    id: "mascota",
-    pregunta: "¿Qué mascota vamos a tener?",
-    placeholder: "Un perro, dos gatos, una tortuga..."
+    id: "perro",
+    pregunta: "¿Qué perro vamos a tener?",
+    placeholder: "Raza, nombre, los dos juntos eligiendo mal..."
   },
   {
     id: "hijos",
@@ -74,14 +73,24 @@ const FUTURO_QUESTIONS = [
     placeholder: "En Mendoza, afuera del país, en el campo..."
   },
   {
-    id: "trabajo",
-    pregunta: "¿A qué te vas a dedicar?",
-    placeholder: "Tu trabajo soñado..."
+    id: "luna",
+    pregunta: "¿Cómo va a ser nuestra luna de miel?",
+    placeholder: "Destino, plan, si es que llegamos a organizarla..."
   },
   {
-    id: "vacaciones",
-    pregunta: "¿Cómo son nuestras vacaciones ideales?",
-    placeholder: "Playa, montaña, ciudad, todo..."
+    id: "comida",
+    pregunta: "¿Qué comida te voy a cocinar?",
+    placeholder: "El plato que siempre vas a pedir..."
+  },
+  {
+    id: "hobby",
+    pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?",
+    placeholder: "Algo que los dos disfruten o toleren..."
+  },
+  {
+    id: "lugar",
+    pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?",
+    placeholder: "El lugar al que siempre volvemos..."
   }
 ];
 
@@ -319,28 +328,45 @@ function renderFuturoLoading() {
 
 async function callGemini() {
   const answers = futuroAnswers;
-  const prompt = `Sos un asistente romántico y creativo. Escribí un texto corto y emotivo (4-5 párrafos) en segunda persona ("vas a", "van a") describiendo cómo va a ser el futuro de una pareja joven de Argentina, basándote en estas respuestas que ella dio:
+  const ideas = [
+    "Va a seguir obligándolo a ver películas románticas aunque él proteste.",
+    "Él la va a seguir obligando a ver películas de culto, largas y complejas, y ella va a fingir que le gustan.",
+    "Van a hacer smash burgers en casa y van a quedar mejor que en cualquier lugar.",
+    `Van a visitar todos los lugares de comida de ${answers.lugar || 'su ciudad'}.`,
+    "Él la va a esperar con la comida hecha, pero ya no va a ser volviendo de la facultad sino del trabajo de kinesióloga.",
+    "Ella lo va a seguir abrazando cada vez que le dé error el código.",
+    "Va a acompañarlo a ver partidos de Boca y del Manchester City, aunque no entienda el offside."
+  ];
 
-- Mascota: ${answers.mascota || 'no especificó'}
-- Hijos: ${answers.hijos || 'no especificó'}  
+  // Elegir 3 ideas al azar para que el texto varíe cada vez
+  const ideasElegidas = ideas.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  const prompt = `Sos un narrador que describe el futuro de una pareja joven. Escribí un texto de 4-5 párrafos en segunda persona dirigido a ella, usando estas respuestas que dio:
+
+- Perro: ${answers.perro || 'no especificó'}
+- Hijos: ${answers.hijos || 'no especificó'}
 - Dónde van a vivir: ${answers.donde || 'no especificó'}
-- Trabajo de ella: ${answers.trabajo || 'no especificó'}
-- Vacaciones ideales: ${answers.vacaciones || 'no especificó'}
+- Luna de miel: ${answers.luna || 'no especificó'}
+- Comida que él le cocina: ${answers.comida || 'no especificó'}
+- Hobby juntos: ${answers.hobby || 'no especificó'}
+- Lugar de comida favorito: ${answers.lugar || 'no especificó'}
 
-El texto tiene que ser cálido, esperanzador, un poco poético, y usar referencias concretas a las respuestas. Escribilo como si fuera una visión del futuro que le estás mostrando. Usá español argentino natural. No uses asteriscos ni formato markdown, solo párrafos de texto plano separados por saltos de línea.`;
+Incorporá de forma natural y sin forzar estas situaciones reales de la pareja (no las copies literal, reescribilas con contexto):
+${ideasElegidas.map((idea, i) => `${i + 1}. ${idea}`).join('\n')}
+
+El tono tiene que ser divertido e ingenioso, no romántico ni poético. Usá las respuestas de ella de manera concreta. Nada de frases genéricas de amor. Sin asteriscos ni markdown, solo párrafos de texto plano separados por saltos de línea.`;
 
   try {
-   const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-  {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }]
-    })
-  }
-);
-
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      }
+    );
 
     const data = await response.json();
     const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
