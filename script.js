@@ -15,7 +15,7 @@ const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 // ──────────────────────────────────────────────────────────
 const DESAFIO_IMAGEN = {
   src: null, // ← reemplazá con "fotos/punta-cana.jpg" cuando tengas la imagen
-  titulo: "Punta Cana, 2027",
+  titulo: "Punta Cana",
   texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
 Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
 No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento. Vos y yo leyendo esto.`
@@ -177,7 +177,7 @@ const WALL_PHOTOS = [
 
 // Estado de los desafíos
 let currentStep = 0;
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 4;
 let futuroAnswers = {};
 let dragSrcIndex = null;
 
@@ -198,7 +198,7 @@ function goToStep(n) {
   window.scrollTo(0, 0);
 
   // Inicializar pasos especiales
-  if (n === 4) initSobre();
+  if (n === 3) initFuturo();
 }
 
 function updateDots() {
@@ -240,18 +240,6 @@ function toggleTodo(i) {
   item.classList.toggle('checked');
   const check = item.querySelector('.todo-check');
   check.textContent = item.classList.contains('checked') ? '✓' : '○';
-}
-
-// ── PASO 2: CARTA FUTURO ──
-function initCarta() {
-  const container = document.getElementById('carta-container');
-  container.innerHTML = `
-    <div class="carta-paper">
-      <p style="font-size:0.8rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">${CARTA_FUTURO.subtitulo}</p>
-      ${CARTA_FUTURO.parrafos.map(p => `<p>${p}</p>`).join('')}
-      <p class="carta-firma">${CARTA_FUTURO.firma}</p>
-    </div>
-  `;
 }
 
 // ── PASO 3: MINIJUEGO FUTURO CON IA ──
@@ -393,7 +381,7 @@ function renderFuturoResult(texto) {
       ${parrafos.map(p => `<p style="font-size:0.95rem">${p}</p>`).join('')}
     </div>
     <div class="text-center">
-      <button class="btn btn-primary" onclick="goToStep(4)">Último desafío →</button>
+      <button class="btn btn-primary" onclick="mostrarSobre()">Último paso →</button>
     </div>
   `;
 }
@@ -458,6 +446,40 @@ function updateCountdown(unlockDate) {
       <span class="countdown-label">${u.label}</span>
     </div>
   `).join('');
+}
+
+function mostrarSobre() {
+  const container = document.getElementById('futuro-container');
+  const unlockDate = new Date(SOBRE_SELLADO.unlockDate + 'T00:00:00');
+  const now = new Date();
+
+  if (now >= unlockDate) {
+    container.innerHTML = `
+      <div class="sobre-card sobre-open">
+        <div style="font-size:3rem;margin-bottom:1rem">💌</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem;color:#fff">El sobre se abrió</h3>
+        <div class="gift-content" style="text-align:left">${SOBRE_SELLADO.contenido}</div>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-gold" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="sobre-card">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.5rem;color:#fff">Para vos, en un año</h3>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);margin-bottom:1.5rem">Este sobre está sellado hasta el ${formatDate(SOBRE_SELLADO.unlockDate)}. La ansiedad forma parte del regalo.</p>
+        <div class="countdown-grid" id="countdown-grid"></div>
+      </div>
+      <div class="mt-3 text-center">
+        <button class="btn btn-gold" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
+      </div>
+    `;
+    const unlockDateRef = unlockDate;
+    updateCountdown(unlockDateRef);
+    setInterval(() => updateCountdown(unlockDateRef), 1000);
+  }
 }
 
 function finalizarDesafios() {
@@ -594,5 +616,4 @@ function switchTab(tabId, btn) {
 document.addEventListener('DOMContentLoaded', () => {
   initImagen();
   initTodo();
-  initCarta();
 });
