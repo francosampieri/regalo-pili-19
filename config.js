@@ -3,4 +3,4 @@
 //  Pegá tu API key acá y no lo toques más.
 // ══════════════════════════════════════════════════════════
 
-const GEMINI_API_KEY = "AQ.Ab8RN6K6mKmiAFs-RyEUrokcaEKBYA1A6ZOU0rRmomufaXXo-g"; // ← pegá tu key acá y guardá
+const GEMINI_API_KEY = "AQ.Ab8RN6I2sY1ofjNGAzMWlWmxO_hy3QCgvti8RaqCAMxifmgz7Q"; // ← pegá tu key acá y guardá
