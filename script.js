@@ -16,9 +16,9 @@ const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 const DESAFIO_IMAGEN = {
   src: null, // ← reemplazá con "fotos/punta-cana.jpg" cuando tengas la imagen
   titulo: "Punta Cana, 2027",
-  texto: `Este lugar todavía no existe en nuestra historia. Pero va a existir.
-Hace tiempo que hablamos de este viaje, de caminar juntos por esa playa, de ese atardecer que todavía no vimos pero que ya siento como nuestro.
-No sé exactamente cuándo va a pasar. Pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento — vos, leyendo esto, sin saber todavía todo lo que nos espera.`
+  texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
+Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
+No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento. Vos y yo leyendo esto.`
 };
 
 // ──────────────────────────────────────────────────────────
@@ -26,14 +26,13 @@ No sé exactamente cuándo va a pasar. Pero sé que va a pasar. Y cuando pase, n
 // Cada item tiene un emoji, un texto, y opcionalmente una fecha aproximada
 // ──────────────────────────────────────────────────────────
 const TODO_ITEMS = [
-  { emoji: "✈️", texto: "Viajar juntos por primera vez solos", fecha: "2027" },
+  { emoji: "✈️", texto: "Viajar juntos", fecha: "null" },
   { emoji: "🏖️", texto: "Ver un atardecer en el mar", fecha: null },
-  { emoji: "🍝", texto: "Cocinar algo complicado y que salga bien (o mal)", fecha: null },
-  { emoji: "🎬", texto: "Hacer una noche de películas con cine en casa de verdad", fecha: null },
-  { emoji: "🏕️", texto: "Acampar bajo las estrellas", fecha: null },
-  { emoji: "🎂", texto: "Sorprenderte en tu cumpleaños de una forma que no esperás", fecha: "cada año" },
-  { emoji: "📸", texto: "Tener una sesión de fotos juntos", fecha: null },
-  { emoji: "🌍", texto: "Perdernos en una ciudad que no conocemos ninguno de los dos", fecha: null },
+  { emoji: "🍝", texto: "Comer en una bodega o restoran caro", fecha: null },
+  { emoji: "🚗", texto: "Escapada en auto a Potrerillos", fecha: null },
+  { emoji: "🌍", texto: "Viajar por Europa", fecha: "null" },
+  { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos", fecha: null },
+  { emoji: "🍔", texto: "Comer una smash en Nueva York", fecha: null },
 ];
 
 // ──────────────────────────────────────────────────────────
@@ -44,13 +43,13 @@ const CARTA_FUTURO = {
   titulo: "Para vos, en 5 años",
   subtitulo: "22 de junio de 2031",
   parrafos: [
-    "Hola. Espero que estés bien. Espero que estemos bien.",
+    "Hola. Espero que estés bien.",
     "Cuando escribí esto, todavía éramos dos personas tratando de entender qué quería decir construir algo juntos. No sabíamos exactamente a dónde íbamos, pero sabíamos que queríamos ir al mismo lugar.",
     "Imagino que a esta altura ya cumplimos un montón de las cosas de esa lista. Imagino que viajamos, que nos peleamos y nos arreglamos, que nos sorprendimos el uno al otro más de una vez.",
     "Lo que sí sé con certeza es esto: elegirte fue la mejor decisión que tomé. Y si en este momento, leyendo esto, todavía sentís algo parecido a lo que yo siento hoy — entonces lo logramos.",
     "Con todo mi amor, siempre."
   ],
-  firma: "— El vos del pasado ❤️"
+  firma: "— Franco Sampieri. 22/06/2026"
 };
 
 // ──────────────────────────────────────────────────────────
@@ -61,32 +60,27 @@ const FUTURO_QUESTIONS = [
   {
     id: "perro",
     pregunta: "¿Qué perro vamos a tener?",
-    placeholder: "Raza, nombre, los dos juntos eligiendo mal..."
+    placeholder: "Raza: Nombre"
   },
   {
     id: "hijos",
     pregunta: "¿Cuántos hijos vamos a tener?",
-    placeholder: "Dos, ninguno, los que vengan..."
+    placeholder: "Uno, Dos, Ninguno.."
   },
   {
     id: "donde",
     pregunta: "¿Dónde vamos a vivir?",
-    placeholder: "En Mendoza, afuera del país, en el campo..."
+    placeholder: "En Mendoza, afuera del país, en algun pueblo, en una ciudad..."
   },
   {
     id: "luna",
     pregunta: "¿Cómo va a ser nuestra luna de miel?",
-    placeholder: "Destino, plan, si es que llegamos a organizarla..."
-  },
-  {
-    id: "comida",
-    pregunta: "¿Qué comida te voy a cocinar?",
-    placeholder: "El plato que siempre vas a pedir..."
+    placeholder: "Destino, plan, explayate..."
   },
   {
     id: "hobby",
     pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?",
-    placeholder: "Algo que los dos disfruten o toleren..."
+    placeholder: "Algo que los dos disfrutemos hacer..."
   },
   {
     id: "lugar",
@@ -336,7 +330,12 @@ async function callGemini() {
     `Van a visitar todos los lugares de comida de ${answers.lugar || 'su ciudad'}.`,
     "Él la va a esperar con la comida hecha, pero ya no va a ser volviendo de la facultad sino del trabajo de kinesióloga.",
     "Ella lo va a seguir abrazando cada vez que le dé error el código.",
-    "Va a acompañarlo a ver partidos de Boca y del Manchester City, aunque no entienda el offside."
+    "Va a acompañarlo a ver partidos de Boca y del Manchester City, aunque no entienda el offside.",
+    "Te va a seguir cocinando pollo al vino blanco cuando quieras",
+    "Van a seguir comiendo pastas con cebolla y crema cuando no sepan que cocinar",
+    "Van a jugar a una reversion del juego Plato creada por el hasta pelearse",
+    "Van a seguir apostando cualquier cosa en el Truco",
+    "Vas a cocinarle brownie pero no tan seguido, lleva mucha manteca"
   ];
 
   // Elegir 3 ideas al azar para que el texto varíe cada vez
@@ -348,7 +347,6 @@ async function callGemini() {
 - Hijos: ${answers.hijos || 'no especificó'}
 - Dónde van a vivir: ${answers.donde || 'no especificó'}
 - Luna de miel: ${answers.luna || 'no especificó'}
-- Comida que él le cocina: ${answers.comida || 'no especificó'}
 - Hobby juntos: ${answers.hobby || 'no especificó'}
 - Lugar de comida favorito: ${answers.lugar || 'no especificó'}
 
