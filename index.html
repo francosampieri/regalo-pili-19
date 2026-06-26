@@ -21,9 +21,9 @@
       Este no es un regalo que se abre y se guarda.<br>
       Es una caja que vamos a ir llenando juntos.
     </p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
-      <button class="btn btn-secondary" onclick="goTo('screen-challenges')">Descubrir la contraseña</button>
+    <div style="display:flex;flex-direction:column;gap:0.8rem;align-items:center;width:100%;max-width:320px;margin:0 auto">
+      <button class="btn btn-primary btn-hero" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
+      <button class="btn btn-secondary btn-sub" onclick="goTo('screen-challenges')">¿No tenés la contraseña? Descubrila acá</button>
     </div>
   </div>
 </div>
@@ -104,7 +104,7 @@
 <div id="screen-password" class="screen">
   <div class="password-gate">
     <div class="lock-icon">🔐</div>
-    <h2>El cofre de regalos</h2>
+    <h2>Tu caja de regalos</h2>
     <p>Ingresá la contraseña para abrir tus regalos.</p>
     <div class="password-input-wrap">
       <input
@@ -128,7 +128,7 @@
 ══════════════════════════════════════ -->
 <div id="screen-gifts" class="screen">
   <div class="gifts-header">
-    <h1>Tu cofre de regalos ✨</h1>
+    <h1>Tu caja de regalos ✨</h1>
     <button
       class="btn btn-secondary"
       style="padding:0.4rem 1rem;font-size:0.85rem;border-color:rgba(255,255,255,0.3);color:#fff"

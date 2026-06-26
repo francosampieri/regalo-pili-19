@@ -26,11 +26,11 @@ No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de e
 // Cada item tiene un emoji, un texto, y opcionalmente una fecha aproximada
 // ──────────────────────────────────────────────────────────
 const TODO_ITEMS = [
-  { emoji: "✈️", texto: "Viajar juntos", fecha: "null" },
+  { emoji: "✈️", texto: "Viajar juntos", fecha: null },
   { emoji: "🏖️", texto: "Ver un atardecer en el mar", fecha: null },
   { emoji: "🍝", texto: "Comer en una bodega o restoran caro", fecha: null },
   { emoji: "🚗", texto: "Escapada en auto a Potrerillos", fecha: null },
-  { emoji: "🌍", texto: "Viajar por Europa", fecha: "null" },
+  { emoji: "🌍", texto: "Viajar por Europa", fecha: null },
   { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos", fecha: null },
   { emoji: "🍔", texto: "Comer una smash en Nueva York", fecha: null },
 ];

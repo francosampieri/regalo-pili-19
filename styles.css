@@ -578,3 +578,19 @@ body {
   transition: border-color 0.15s;
 }
 .futuro-input:focus { border-color: var(--rose); }
+
+/* Botones portada */
+.btn-hero {
+  width: 100%;
+  padding: 1.1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(200,112,138,0.35);
+}
+.btn-sub {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.65rem 1.2rem;
+  opacity: 0.85;
+}
