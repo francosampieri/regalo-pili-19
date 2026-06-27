@@ -600,7 +600,7 @@ body {
    PORTADA — rediseño completo
 ═══════════════════════════════════════════ */
 
-#screen-cover {
+#screen-cover.active {
   display: grid !important;
   grid-template-columns: 55% 45%;
   min-height: 100vh;
