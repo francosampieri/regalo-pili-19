@@ -822,8 +822,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function initButtons() {
     const o = document.getElementById('btnOpen');
     const p = document.getElementById('btnPass');
-    if (o) o.addEventListener('click', () => window.goTo && window.goTo('screen-password'));
-    if (p) p.addEventListener('click', () => window.goTo && window.goTo('screen-challenges'));
+    if (o) o.addEventListener('click', () => goTo('screen-password'));
+    if (p) p.addEventListener('click', () => goTo('screen-challenges'));
   }
 
   document.addEventListener('DOMContentLoaded', () => {
