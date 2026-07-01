@@ -560,6 +560,18 @@ body {
   align-items: center;
   justify-content: center;
 }
+.screen.hero { display: none; }
+.screen.active.hero {
+  display: flex;
+  position: relative;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  opacity: 0;
+  animation: fadeIn 1.2s var(--ease) .1s forwards;
+}
 .hero {
   position: relative;
   width: 100vw; height: 100vh;
