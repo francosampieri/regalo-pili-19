@@ -2,174 +2,100 @@
 //  CONFIGURACIÓN ← TODO LO QUE TENÉS QUE EDITAR ESTÁ ACÁ
 // ══════════════════════════════════════════════════════════
 
-// 🔑 Contraseña para entrar a los regalos
-const MAIN_PASSWORD = "futuro"; // ← cambiá esto
-
-// 🤖 API Key de Google Gemini
+const MAIN_PASSWORD = "futuro";
 const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 
-// ──────────────────────────────────────────────────────────
-// 🖼️ DESAFÍO 1 — Imagen IA + texto
-// src: ruta a la imagen generada con IA (ej: "fotos/punta-cana.jpg")
-// texto: lo que aparece debajo de la imagen
-// ──────────────────────────────────────────────────────────
 const DESAFIO_IMAGEN = {
-  src: null, // ← reemplazá con "fotos/punta-cana.jpg" cuando tengas la imagen
+  src: null,
   titulo: "Punta Cana",
   texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
 Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
 No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento. Vos y yo leyendo esto.`
 };
 
-// ──────────────────────────────────────────────────────────
-// ✅ DESAFÍO 2 — To Do List del futuro
-// Cada item tiene un emoji, un texto, y opcionalmente una fecha aproximada
-// ──────────────────────────────────────────────────────────
+// Drag-to-rank: ordenar por ganas
 const TODO_ITEMS = [
-  { emoji: "✈️", texto: "Viajar juntos", fecha: null },
-  { emoji: "🏖️", texto: "Ver un atardecer en el mar", fecha: null },
-  { emoji: "🍝", texto: "Comer en una bodega o restoran caro", fecha: null },
-  { emoji: "🚗", texto: "Escapada en auto a Potrerillos", fecha: null },
-  { emoji: "🌍", texto: "Viajar por Europa", fecha: null },
-  { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos", fecha: null },
-  { emoji: "🍔", texto: "Comer una smash en Nueva York", fecha: null },
+  { emoji: "✈️", texto: "Viajar juntos a Europa" },
+  { emoji: "🏖️", texto: "Ver un atardecer en el mar" },
+  { emoji: "🍝", texto: "Comer en una bodega o restoran caro" },
+  { emoji: "🚗", texto: "Escapada en auto a Potrerillos" },
+  { emoji: "🍔", texto: "Comer una smash en Nueva York" },
+  { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos" },
+  { emoji: "🐶", texto: "Tener nuestro primer perro" },
 ];
 
-// ──────────────────────────────────────────────────────────
-// 📝 DESAFÍO 3 — Carta para el futuro
-// Se muestra entre el To Do y el minijuego
-// ──────────────────────────────────────────────────────────
-const CARTA_FUTURO = {
-  titulo: "Para vos, en 5 años",
-  subtitulo: "22 de junio de 2031",
-  parrafos: [
-    "Hola. Espero que estés bien.",
-    "Cuando escribí esto, todavía éramos dos personas tratando de entender qué quería decir construir algo juntos. No sabíamos exactamente a dónde íbamos, pero sabíamos que queríamos ir al mismo lugar.",
-    "Imagino que a esta altura ya cumplimos un montón de las cosas de esa lista. Imagino que viajamos, que nos peleamos y nos arreglamos, que nos sorprendimos el uno al otro más de una vez.",
-    "Lo que sí sé con certeza es esto: elegirte fue la mejor decisión que tomé. Y si en este momento, leyendo esto, todavía sentís algo parecido a lo que yo siento hoy — entonces lo logramos.",
-    "Con todo mi amor, siempre."
-  ],
-  firma: "— Franco Sampieri. 22/06/2026"
-};
-
-// ──────────────────────────────────────────────────────────
-// 🎮 DESAFÍO 4 — Minijuego: construí nuestro futuro
-// Preguntas con opciones, al final la IA genera el texto
-// ──────────────────────────────────────────────────────────
 const FUTURO_QUESTIONS = [
-  {
-    id: "perro",
-    pregunta: "¿Qué perro vamos a tener?",
-    placeholder: "Raza: Nombre"
-  },
-  {
-    id: "hijos",
-    pregunta: "¿Cuántos hijos vamos a tener?",
-    placeholder: "Uno, Dos, Ninguno.."
-  },
-  {
-    id: "donde",
-    pregunta: "¿Dónde vamos a vivir?",
-    placeholder: "En Mendoza, afuera del país, en algun pueblo, en una ciudad..."
-  },
-  {
-    id: "luna",
-    pregunta: "¿Cómo va a ser nuestra luna de miel?",
-    placeholder: "Destino, plan, explayate..."
-  },
-  {
-    id: "hobby",
-    pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?",
-    placeholder: "Algo que los dos disfrutemos hacer..."
-  },
-  {
-    id: "lugar",
-    pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?",
-    placeholder: "El lugar al que siempre volvemos..."
-  }
+  { id: "perro",  pregunta: "¿Qué perro vamos a tener?",                    placeholder: "Raza: Nombre" },
+  { id: "hijos",  pregunta: "¿Cuántos hijos vamos a tener?",                placeholder: "Uno, dos, ninguno..." },
+  { id: "donde",  pregunta: "¿Dónde vamos a vivir?",                        placeholder: "En Mendoza, afuera del país..." },
+  { id: "luna",   pregunta: "¿Cómo va a ser nuestra luna de miel?",         placeholder: "Destino, plan..." },
+  { id: "hobby",  pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?", placeholder: "Algo que los dos disfrutemos..." },
+  { id: "lugar",  pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?", placeholder: "El lugar al que siempre volvemos..." },
 ];
 
-// ──────────────────────────────────────────────────────────
-// 🔒 DESAFÍO 5 — Sobre sellado
-// Se desbloquea el 22 de junio de 2027
-// contenido: lo que aparece cuando se abra (podés completarlo después)
-// ──────────────────────────────────────────────────────────
-const SOBRE_SELLADO = {
-  unlockDate: "2027-06-22",
-  contenido: `
-    <p>Si estás leyendo esto, pasó un año entero desde que te di este regalo.</p>
-    <p>Acá va a ir algo especial — todavía lo estoy pensando. Pero cuando llegue el momento, va a valer la pena haber esperado.</p>
-  `
-  // ← Completá esto cuando falte poco para la fecha
-};
-
-// ──────────────────────────────────────────────────────────
 // 🎁 REGALOS
-// Tipos: "available", "date", "password", "surprise"
-// ──────────────────────────────────────────────────────────
 const GIFTS = [
   {
-    id: "gift-1",
-    type: "available",
-    icon: "💌",
-    name: "El primer regalo",
-    hint: "Esto es tuyo desde hoy.",
-    content: `<p>Acá va el contenido del primer regalo inmediato — completar.</p>`
-  },
-  {
-    id: "gift-2",
+    id: "gift-carta",
     type: "date",
-    icon: "🏔️",
-    name: "El escape perfecto",
-    hint: "Un fin de semana para los dos, lejos de todo.",
-    unlockDate: "2025-12-21",
-    content: `<p>Descripción de la escapada — completar cuando toque.</p>`
+    icon: "💌",
+    name: "???",
+    hint: "Este sobre está sellado hasta tu próximo cumpleaños.",
+    unlockDate: "2027-06-22",
+    showCountdown: true,
+    flyer: "carta"
   },
   {
-    id: "gift-3",
-    type: "password",
+    id: "gift-cena",
+    type: "surprise",
     icon: "🍽️",
-    name: "Una noche especial",
-    hint: "Cuando yo te diga, te paso la clave.",
-    unlockPassword: "cena2025",
-    content: `<p>Descripción de la cena sorpresa — completar cuando toque.</p>`
+    name: "???",
+    hint: "¡Este regalo es para este mes! Yo que vos revisaria la pagina seguido..",
+    flyer: "cena"
   },
   {
-    id: "gift-4",
+    id: "gift-noche",
+    type: "password",
+    icon: "🕯️",
+    name: "Una noche especial",
+    hint: "En el momento indicado, recibiras la clave. Estate atenta",
+    unlockPassword: "rigoletto",
+    flyer: "noche"
+  },
+  {
+    id: "gift-primavera",
+    type: "date",
+    icon: "🌸",
+    name: "???",
+    hint: "Cuando empiece a pasar el frio y las flores vuelvan a florecer, este regalo va a aparecer",
+    unlockDate: "2026-09-22",
+    customLabel: "Cuando menos te lo esperes..",
+    noOpen: true
+  },
+  {
+    id: "gift-verano",
     type: "date",
     icon: "☀️",
     name: "El regalo del verano",
-    hint: "Cuando llegue el calor, aparece algo para los dos.",
-    unlockDate: "2025-12-21",
-    content: `<p>Contenido del regalo de verano — completar.</p>`
+    hint: "Cuando llegue el calor, una promesa se va a cumplir",
+    unlockDate: "2026-12-21",
+    customLabel: "Se abre en verano",
+    noOpen: true
   },
   {
-    id: "gift-5",
-    type: "surprise",
-    icon: "🎊",
+    id: "gift-cabana",
+    type: "wall",
+    icon: "🛖",
     name: "???",
-    hint: "Este se desbloquea solo. No sé cuándo. Esperalo."
+    hint: "Cuando subamos la ultima foto al album, obtendrás este regalo",
+    wallPhotosRequired: 5,
+    flyer: "cabana"
   },
-  {
-    id: "gift-6",
-    type: "date",
-    icon: "🌸",
-    name: "Regalo por definir",
-    hint: "Algo lindo está en camino.",
-    unlockDate: "2026-03-20",
-    content: `<p>Contenido por definir.</p>`
-  }
 ];
 
-// ──────────────────────────────────────────────────────────
-// 📸 MURO DE FOTOS
-// Agregá una entrada cada vez que cumplan un regalo
-// { src: "fotos/foto.jpg", caption: "Texto", date: "enero 2026" }
-// ──────────────────────────────────────────────────────────
 const WALL_PHOTOS = [
   // { src: "fotos/foto1.jpg", caption: "Primera vez que lo cumplimos ✨", date: "enero 2026" },
 ];
-
 
 // ══════════════════════════════════════════════════════════
 //  LÓGICA — no toques nada de acá para abajo
@@ -223,23 +149,59 @@ function initImagen() {
   `;
 }
 
-// ── PASO 1: TODO LIST ──
+// ── PASO 1: TODO LIST → DRAG TO RANK ──
+let todoOrder = [];
+
 function initTodo() {
-  const container = document.getElementById('todo-container');
-  container.innerHTML = TODO_ITEMS.map((item, i) => `
-    <div class="todo-item" id="todo-${i}" onclick="toggleTodo(${i})">
-      <span class="todo-check">○</span>
-      <span class="todo-emoji">${item.emoji}</span>
-      <span class="todo-text">${item.texto}${item.fecha ? `<span class="todo-fecha"> — ${item.fecha}</span>` : ''}</span>
-    </div>
-  `).join('');
+  todoOrder = TODO_ITEMS.map((_, i) => i);
+  renderTodoList();
 }
 
-function toggleTodo(i) {
-  const item = document.getElementById('todo-' + i);
-  item.classList.toggle('checked');
-  const check = item.querySelector('.todo-check');
-  check.textContent = item.classList.contains('checked') ? '✓' : '○';
+function renderTodoList() {
+  const container = document.getElementById('todo-container');
+  container.innerHTML = todoOrder.map((itemIndex, pos) => {
+    const item = TODO_ITEMS[itemIndex];
+    return `
+    <div class="todo-item" draggable="true" data-index="${itemIndex}"
+         ondragstart="todoDragStart(event, ${itemIndex})"
+         ondragover="todoDragOver(event)"
+         ondrop="todoDrop(event, ${itemIndex})"
+         ondragend="todoDragEnd(event)">
+      <span class="todo-rank">${pos + 1}</span>
+      <span class="todo-drag-handle">⋮⋮</span>
+      <span class="todo-emoji">${item.emoji}</span>
+      <span class="todo-text">${item.texto}</span>
+    </div>
+  `;
+  }).join('');
+}
+
+function todoDragStart(e, index) {
+  dragSrcIndex = index;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function todoDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+
+function todoDrop(e, targetIndex) {
+  e.preventDefault();
+  if (dragSrcIndex === null || dragSrcIndex === targetIndex) return;
+
+  const fromPos = todoOrder.indexOf(dragSrcIndex);
+  const toPos = todoOrder.indexOf(targetIndex);
+  todoOrder.splice(fromPos, 1);
+  todoOrder.splice(toPos, 0, dragSrcIndex);
+
+  renderTodoList();
+  dragSrcIndex = null;
+}
+
+function todoDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
 }
 
 // ── PASO 3: MINIJUEGO FUTURO CON IA ──
@@ -386,100 +348,34 @@ function renderFuturoResult(texto) {
   `;
 }
 
-// ── PASO 4: SOBRE SELLADO ──
-function initSobre() {
-  const unlockDate = new Date(SOBRE_SELLADO.unlockDate + 'T00:00:00');
-  const now = new Date();
-  const container = document.getElementById('sobre-container');
-
-  if (now >= unlockDate) {
-    // Desbloqueado
-    container.innerHTML = `
-      <div class="sobre-card sobre-open">
-        <div style="font-size:3rem;margin-bottom:1rem">💌</div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem">El sobre se abrió</h3>
-        <div class="gift-content">${SOBRE_SELLADO.contenido}</div>
-      </div>
-      <div class="mt-3 text-center">
-        <button class="btn btn-gold" onclick="finalizarDesafios()">Ir a los regalos 🎁</button>
-      </div>
-    `;
-  } else {
-    // Bloqueado con cuenta regresiva
-    container.innerHTML = `
-      <div class="sobre-card">
-        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.5rem;color:var(--ink)">Abrí esto en un año</h3>
-        <p style="font-size:0.9rem;color:var(--ink-soft);margin-bottom:1.5rem">Este sobre está sellado hasta el ${formatDate(SOBRE_SELLADO.unlockDate)}. Vas a tener que esperar.</p>
-        <div class="countdown-grid" id="countdown-grid"></div>
-        <p style="font-size:0.8rem;color:var(--locked);margin-top:1rem">La ansiedad forma parte del regalo.</p>
-      </div>
-      <div class="mt-3 text-center">
-        <button class="btn btn-gold" onclick="finalizarDesafios()">Ir a los regalos 🎁</button>
-      </div>
-    `;
-    updateCountdown(unlockDate);
-    setInterval(() => updateCountdown(unlockDate), 1000);
-  }
-}
-
-function updateCountdown(unlockDate) {
-  const now = new Date();
-  const diff = unlockDate - now;
-  if (diff <= 0) { initSobre(); return; }
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-  const grid = document.getElementById('countdown-grid');
-  if (!grid) return;
-  grid.innerHTML = [
-    { val: days, label: 'días' },
-    { val: hours, label: 'horas' },
-    { val: mins, label: 'min' },
-    { val: secs, label: 'seg' }
-  ].map(u => `
-    <div class="countdown-unit">
-      <span class="countdown-val">${String(u.val).padStart(2, '0')}</span>
-      <span class="countdown-label">${u.label}</span>
-    </div>
-  `).join('');
-}
-
+// ── PASO 4: REVELA LA CONTRASEÑA (pergamino) ──
 function mostrarSobre() {
   const container = document.getElementById('futuro-container');
-  const unlockDate = new Date(SOBRE_SELLADO.unlockDate + 'T00:00:00');
-  const now = new Date();
+  container.innerHTML = `
+    <div class="scroll-reveal" id="scrollReveal">
+      <div class="scroll-seal" id="scrollSeal" onclick="openScroll()">
+        <div class="scroll-seal-icon">🔖</div>
+        <p class="scroll-seal-text">Tocá para abrir</p>
+      </div>
+      <div class="scroll-paper" id="scrollPaper">
+        <div class="scroll-paper-inner">
+          <p class="scroll-label">La contraseña de la caja es</p>
+          <p class="scroll-password">${MAIN_PASSWORD}</p>
+          <p class="scroll-hint">Guardala. La vas a necesitar cada vez que quieras volver a ver tus regalos.</p>
+          <button class="btn btn-gold mt-3" onclick="goTo('screen-password')">Ir a la caja 🎁</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
-  if (now >= unlockDate) {
-    container.innerHTML = `
-      <div class="sobre-card sobre-open">
-        <div style="font-size:3rem;margin-bottom:1rem">💌</div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem;color:#fff">El sobre se abrió</h3>
-        <div class="gift-content" style="text-align:left">${SOBRE_SELLADO.contenido}</div>
-      </div>
-      <div class="mt-3 text-center">
-        <button class="btn btn-gold" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
-      </div>
-    `;
-  } else {
-    container.innerHTML = `
-      <div class="sobre-card">
-        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.5rem;color:#fff">Para vos, en un año</h3>
-        <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);margin-bottom:1.5rem">Este sobre está sellado hasta el ${formatDate(SOBRE_SELLADO.unlockDate)}. La ansiedad forma parte del regalo.</p>
-        <div class="countdown-grid" id="countdown-grid"></div>
-      </div>
-      <div class="mt-3 text-center">
-        <button class="btn btn-gold" onclick="goTo('screen-password')">Abrir la caja 🎁</button>
-      </div>
-    `;
-    const unlockDateRef = unlockDate;
-    updateCountdown(unlockDateRef);
-    setInterval(() => updateCountdown(unlockDateRef), 1000);
-  }
+function openScroll() {
+  const seal = document.getElementById('scrollSeal');
+  const paper = document.getElementById('scrollPaper');
+  seal.classList.add('scroll-seal--open');
+  setTimeout(() => {
+    paper.classList.add('scroll-paper--open');
+  }, 350);
 }
 
 function finalizarDesafios() {
@@ -492,13 +388,35 @@ function checkMainPassword() {
   const err = document.getElementById('main-password-error');
   if (val === MAIN_PASSWORD.toLowerCase()) {
     err.style.display = 'none';
-    goTo('screen-gifts');
-    renderGifts();
-    renderWall();
+    playBoxOpenAnimation();
   } else {
     err.style.display = 'block';
     document.getElementById('main-password-input').value = '';
   }
+}
+
+function playBoxOpenAnimation() {
+  const overlay = document.getElementById('boxOpenOverlay');
+  overlay.classList.add('box-open-overlay--visible');
+
+  // Secuencia: aparece → tapa salta y gira → luz estalla → texto →
+  // (mientras el overlay sigue OPACO) cambiamos a la pantalla de regalos →
+  // recién ahí arranca el fade, revelando los regalos ya listos detrás.
+  setTimeout(() => overlay.classList.add('box-open--lid'),   150);
+  setTimeout(() => overlay.classList.add('box-open--burst'), 900);
+  setTimeout(() => overlay.classList.add('box-open--text'), 1200);
+  setTimeout(() => {
+    goTo('screen-gifts');
+    renderGifts();
+    renderWall();
+  }, 2200);
+  setTimeout(() => overlay.classList.add('box-open--fade'), 2350);
+  setTimeout(() => {
+    overlay.classList.remove(
+      'box-open-overlay--visible', 'box-open--lid',
+      'box-open--burst', 'box-open--text', 'box-open--fade'
+    );
+  }, 2950);
 }
 
 // ── REGALOS ──
@@ -510,39 +428,58 @@ function renderGifts() {
   GIFTS.forEach(gift => {
     let isLocked = true;
     let badgeHtml = '';
-    let extraHtml = '';
+    let visibleHtml = ''; // countdown, formulario de pw, etc. — siempre visible
 
     if (gift.type === 'available') {
       isLocked = false;
       badgeHtml = `<span class="gift-badge badge-available">✓ Disponible ahora</span>`;
-      extraHtml = `<div class="gift-content">${gift.content}</div>`;
 
     } else if (gift.type === 'date') {
       const unlock = new Date(gift.unlockDate + 'T00:00:00');
       if (now >= unlock) {
         isLocked = false;
         badgeHtml = `<span class="gift-badge badge-available">✓ Desbloqueado</span>`;
-        extraHtml = gift.content ? `<div class="gift-content">${gift.content}</div>` : '';
       } else {
-        const days = Math.ceil((unlock - now) / (1000 * 60 * 60 * 24));
-        badgeHtml = `<span class="gift-badge badge-date">📅 Se abre el ${formatDate(gift.unlockDate)}</span>`;
-        extraHtml = `<p class="countdown">⏳ Faltan ${days} días</p>`;
+        const label = gift.customLabel || `📅 Se abre el ${formatDate(gift.unlockDate)}`;
+        badgeHtml = `<span class="gift-badge badge-date">${label}</span>`;
+        if (gift.showCountdown) {
+          visibleHtml = `<div class="mini-countdown" id="mini-countdown-${gift.id}"></div>`;
+        }
       }
 
     } else if (gift.type === 'password') {
       badgeHtml = `<span class="gift-badge badge-password">🔑 Con contraseña secreta</span>`;
-      extraHtml = `
+      visibleHtml = `
         <div class="password-unlock-form">
           <input type="text" placeholder="contraseña secreta" id="pw-${gift.id}" autocomplete="off">
           <button onclick="unlockWithPassword('${gift.id}', '${gift.unlockPassword}')">Abrir</button>
         </div>
-        <p id="pw-err-${gift.id}" style="font-size:0.8rem;color:#a32d2d;margin-top:4px;display:none">Contraseña incorrecta</p>
-        <div id="pw-content-${gift.id}" style="display:none">${gift.content || '<p>Contenido próximamente.</p>'}</div>
+        <p id="pw-err-${gift.id}" style="font-size:0.8rem;color:#f09090;margin-top:4px;display:none">Contraseña incorrecta</p>
       `;
 
     } else if (gift.type === 'surprise') {
       badgeHtml = `<span class="gift-badge badge-surprise">🎲 Sorpresa</span>`;
-      extraHtml = `<p style="font-size:0.8rem;color:var(--locked);margin-top:0.5rem">Aparece solo cuando sea el momento.</p>`;
+
+    } else if (gift.type === 'wall') {
+      const uploaded = WALL_PHOTOS.length;
+      const required = gift.wallPhotosRequired || 5;
+      if (uploaded >= required) {
+        isLocked = false;
+        badgeHtml = `<span class="gift-badge badge-available">✓ Desbloqueado</span>`;
+      } else {
+        badgeHtml = `<span class="gift-badge badge-surprise">📸 ${uploaded}/${required} fotos en el muro</span>`;
+      }
+    }
+
+    // Botón "Abrir" → dispara la animación del flyer.
+    // Los regalos con noOpen (primavera, verano) no tienen botón ni interacción.
+    let abrirBtnHtml = '';
+    if (!gift.noOpen && gift.type !== 'password' && gift.flyer) {
+      abrirBtnHtml = isLocked
+        ? `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`
+        : `<button class="btn gift-open-btn" onclick="openGiftFlyer('${gift.name}', '${gift.flyer}')">Abrir</button>`;
+    } else if (!gift.noOpen && gift.type !== 'password' && isLocked) {
+      abrirBtnHtml = `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`;
     }
 
     const card = document.createElement('div');
@@ -552,25 +489,84 @@ function renderGifts() {
       <h3 class="gift-name">${gift.name}</h3>
       <p class="gift-hint">${gift.hint}</p>
       ${badgeHtml}
-      ${extraHtml}
+      <div class="gift-card-footer">
+        ${visibleHtml}
+        ${abrirBtnHtml}
+      </div>
     `;
     grid.appendChild(card);
   });
+
+  // Iniciar contadores en vivo (días/horas/min/seg) para regalos con showCountdown
+  GIFTS.forEach(gift => {
+    if (gift.type === 'date' && gift.showCountdown) {
+      const unlock = new Date(gift.unlockDate + 'T00:00:00');
+      if (new Date() < unlock) {
+        updateMiniCountdown(gift.id, unlock);
+        setInterval(() => updateMiniCountdown(gift.id, unlock), 1000);
+      }
+    }
+  });
+}
+
+function updateMiniCountdown(giftId, unlockDate) {
+  const el = document.getElementById('mini-countdown-' + giftId);
+  if (!el) return;
+  const now = new Date();
+  const diff = unlockDate - now;
+  if (diff <= 0) { renderGifts(); return; }
+
+  const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+  el.innerHTML = [
+    { val: days,  label: 'días' },
+    { val: hours, label: 'hs' },
+    { val: mins,  label: 'min' },
+    { val: secs,  label: 'seg' }
+  ].map(u => `<span class="mini-countdown-unit"><b>${String(u.val).padStart(2,'0')}</b><span>${u.label}</span></span>`).join('');
 }
 
 function unlockWithPassword(giftId, correctPw) {
   const input = document.getElementById('pw-' + giftId);
   const err = document.getElementById('pw-err-' + giftId);
-  const content = document.getElementById('pw-content-' + giftId);
   if (input.value.trim().toLowerCase() === correctPw.toLowerCase()) {
     err.style.display = 'none';
-    input.closest('.password-unlock-form').style.display = 'none';
-    content.style.display = 'block';
+    const gift = GIFTS.find(g => g.id === giftId);
     input.closest('.gift-card').classList.remove('locked');
+    if (gift && gift.flyer) openGiftFlyer(gift.name, gift.flyer);
   } else {
     err.style.display = 'block';
     input.value = '';
   }
+}
+
+// ── ANIMACIÓN: ABRIR EL FLYER DE UN REGALO ──
+function openGiftFlyer(giftName, flyerKey) {
+  const overlay = document.getElementById('giftFlyerOverlay');
+  const img = document.getElementById('giftFlyerImg');
+  const title = document.getElementById('giftFlyerTitle');
+
+  img.src = `assets/${flyerKey}.webp`;
+  title.textContent = giftName === '???' ? '' : giftName;
+
+  overlay.classList.add('flyer-overlay--visible');
+  requestAnimationFrame(() => {
+    setTimeout(() => overlay.classList.add('flyer-overlay--open'), 60);
+  });
+}
+
+function closeGiftFlyer() {
+  const overlay = document.getElementById('giftFlyerOverlay');
+  overlay.classList.remove('flyer-overlay--open', 'flyer-overlay--zoomed');
+  setTimeout(() => overlay.classList.remove('flyer-overlay--visible'), 500);
+}
+
+function toggleFlyerZoom() {
+  const overlay = document.getElementById('giftFlyerOverlay');
+  overlay.classList.toggle('flyer-overlay--zoomed');
 }
 
 function formatDate(dateStr) {
@@ -733,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
         left:  '10%',
         top:   '18%',
         rot:   6,
-        delay: '0.6s',
+        delay: '1.4s',
         dur:   '9s',
       },
       {
@@ -751,9 +747,12 @@ document.addEventListener('DOMContentLoaded', () => {
       wrap.className = 'pol pol--portrait';
       wrap.style.position = 'absolute';
       wrap.style.zIndex   = '8';
+      wrap.style.opacity  = '0';
+      wrap.style.animation = `portraitIn .9s cubic-bezier(.22,1,.36,1) ${p.delay} forwards`;
       if (p.left)  wrap.style.left  = p.left;
       if (p.right) wrap.style.right = p.right;
       wrap.style.top = p.top;
+      wrap.style.setProperty('--rot', p.rot + 'deg');
 
       wrap.innerHTML = `
         <div class="pol__frame" style="
