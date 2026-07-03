@@ -157,11 +157,18 @@
 <div id="screen-gifts" class="screen">
   <div class="gifts-header">
     <h1>Tu caja de regalos ✨</h1>
-    <button
-      class="btn btn-secondary"
-      style="padding:0.4rem 1rem;font-size:0.85rem;border-color:rgba(255,255,255,0.3);color:#fff"
-      onclick="goTo('screen-cover')"
-    >Inicio</button>
+    <div style="display:flex;gap:.6rem;align-items:center">
+      <button
+        class="btn btn-secondary"
+        style="padding:0.4rem 0.9rem;font-size:0.8rem;border-color:rgba(200,150,58,.35);color:var(--hgoldlt)"
+        onclick="showGiftsIntro()"
+      >¿Cómo funciona?</button>
+      <button
+        class="btn btn-secondary"
+        style="padding:0.4rem 1rem;font-size:0.85rem;border-color:rgba(255,255,255,0.3);color:#fff"
+        onclick="goTo('screen-cover')"
+      >Inicio</button>
+    </div>
   </div>
 
   <div class="nav-tabs">
@@ -201,6 +208,43 @@
         <img class="flyer-image" id="giftFlyerImg" src="" alt="" onclick="toggleFlyerZoom()">
         <p class="flyer-title" id="giftFlyerTitle"></p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── OVERLAY: CARTA EXPLICATIVA — sobre que se abre y despliega la carta ── -->
+<div class="intro-overlay" id="giftsIntroOverlay">
+  <div class="intro-backdrop"></div>
+
+  <div class="intro-envelope" id="introEnvelope" onclick="openGiftsIntro()">
+    <div class="intro-envelope-flap"></div>
+    <div class="intro-envelope-body">
+      <span class="intro-envelope-icon">💌</span>
+      <p class="intro-envelope-text">Tocá para leer</p>
+    </div>
+  </div>
+
+  <div class="intro-letter" id="introLetter">
+    <div class="intro-letter-inner">
+      <p class="intro-letter-label">Antes de que sigas</p>
+      <h3 class="intro-letter-title">Así funciona esta caja</h3>
+
+      <div class="intro-steps">
+        <div class="intro-step" style="--d:.05s">
+          <span class="intro-step-icon">🔓</span>
+          <p>Cada regalo se desbloquea a su manera y a su tiempo: algunos con una fecha, otros con una contraseña, y algunos son pura sorpresa.</p>
+        </div>
+        <div class="intro-step" style="--d:.25s">
+          <span class="intro-step-icon">📸</span>
+          <p>Cada vez que cumplamos uno, subimos una foto al muro. Así vamos armando el álbum de todo lo que hicimos.</p>
+        </div>
+        <div class="intro-step" style="--d:.45s">
+          <span class="intro-step-icon">🛖</span>
+          <p>Cuando el muro llegue a cinco fotos, se va a desbloquear el último regalo — el más especial de todos.</p>
+        </div>
+      </div>
+
+      <button class="btn btn-gold mt-3" onclick="closeGiftsIntro()" style="width:100%">Entendido, vamos a los regalos</button>
     </div>
   </div>
 </div>

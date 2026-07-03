@@ -416,7 +416,31 @@ function playBoxOpenAnimation() {
       'box-open-overlay--visible', 'box-open--lid',
       'box-open--burst', 'box-open--text', 'box-open--fade'
     );
+    showGiftsIntro();
   }, 2950);
+}
+
+// ── CARTA EXPLICATIVA: sobre que se abre revelando la carta ──
+function showGiftsIntro() {
+  const overlay = document.getElementById('giftsIntroOverlay');
+  if (!overlay) return;
+  overlay.classList.add('intro-overlay--visible');
+}
+
+function openGiftsIntro() {
+  const envelope = document.getElementById('introEnvelope');
+  const letter = document.getElementById('introLetter');
+  envelope.classList.add('intro-envelope--open');
+  setTimeout(() => letter.classList.add('intro-letter--open'), 550);
+}
+
+function closeGiftsIntro() {
+  const overlay = document.getElementById('giftsIntroOverlay');
+  overlay.classList.remove('intro-overlay--visible');
+  setTimeout(() => {
+    document.getElementById('introEnvelope').classList.remove('intro-envelope--open');
+    document.getElementById('introLetter').classList.remove('intro-letter--open');
+  }, 500);
 }
 
 // ── REGALOS ──
