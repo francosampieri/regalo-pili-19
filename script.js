@@ -2,7 +2,7 @@
 //  CONFIGURACIÓN ← TODO LO QUE TENÉS QUE EDITAR ESTÁ ACÁ
 // ══════════════════════════════════════════════════════════
 
-const MAIN_PASSWORD = "futuro";
+const MAIN_PASSWORD = "error";
 const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 
 const DESAFIO_IMAGEN = {
@@ -806,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const portraits = [
       {
         src:   'assets/couple.jpg',
-        left:  '10%',
+        left:  '14%',
         top:   '18%',
         rot:   6,
         delay: '1.4s',
@@ -814,7 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       {
         src:   'assets/beach_portrait.jpg',
-        right: '10%',
+        right: '14%',
         top:   '18%',
         rot:   -5,
         delay: '1.4s',
