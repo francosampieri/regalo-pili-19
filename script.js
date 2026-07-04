@@ -6,31 +6,31 @@ const MAIN_PASSWORD = "futuro";
 const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 
 const DESAFIO_IMAGEN = {
-  src: null,
+  src: "assets/p_cana.png",
   titulo: "Punta Cana",
   texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
-Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
+Desde el principio venimos soñando con este viaje, caminar juntos por esa playa, probar cada restaurante tematico, ese atardecer que todavía no vimos juntos.
 No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento. Vos y yo leyendo esto.`
 };
 
 // Drag-to-rank: ordenar por ganas
 const TODO_ITEMS = [
-  { emoji: "✈️", texto: "Viajar juntos a Europa" },
+  { emoji: "🛩️", texto: "Viajar solos por primera vez" },
   { emoji: "🏖️", texto: "Ver un atardecer en el mar" },
-  { emoji: "🍝", texto: "Comer en una bodega o restoran caro" },
+  { emoji: "🍷", texto: "Comer en una bodega o restaurante caro" },
   { emoji: "🚗", texto: "Escapada en auto a Potrerillos" },
-  { emoji: "🍔", texto: "Comer una smash en Nueva York" },
+  { emoji: "🌍", texto: "Recorrer Europa" },
+  { emoji: "🍔", texto: "Comer una smash en Estados Unidos" },
   { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos" },
-  { emoji: "🐶", texto: "Tener nuestro primer perro" },
 ];
 
 const FUTURO_QUESTIONS = [
-  { id: "perro",  pregunta: "¿Qué perro vamos a tener?",                    placeholder: "Raza: Nombre" },
+  { id: "perro",  pregunta: "¿Qué perro vamos a tener?",                    placeholder: "Raza, Nombre" },
   { id: "hijos",  pregunta: "¿Cuántos hijos vamos a tener?",                placeholder: "Uno, dos, ninguno..." },
-  { id: "donde",  pregunta: "¿Dónde vamos a vivir?",                        placeholder: "En Mendoza, afuera del país..." },
+  { id: "donde",  pregunta: "¿Dónde vamos a vivir?",                        placeholder: "Lugar, tipo de casa..." },
   { id: "luna",   pregunta: "¿Cómo va a ser nuestra luna de miel?",         placeholder: "Destino, plan..." },
-  { id: "hobby",  pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?", placeholder: "Algo que los dos disfrutemos..." },
-  { id: "lugar",  pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?", placeholder: "El lugar al que siempre volvemos..." },
+  { id: "hobby",  pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?", placeholder: "Algo que en 20 años vamos a seguir disfrutando juntos..." },
+  { id: "lugar",  pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?", placeholder: "El lugar al que siempre volveremos..." },
 ];
 
 // 🎁 REGALOS
@@ -128,24 +128,33 @@ function goToStep(n) {
 }
 
 function updateDots() {
+  const total = 4;
   document.querySelectorAll('.dot').forEach((d, i) => {
     d.classList.remove('active', 'done');
     if (i < currentStep) d.classList.add('done');
     if (i === currentStep) d.classList.add('active');
   });
+  const fill = document.getElementById('stepperFill');
+  if (fill) {
+    const pct = (currentStep / (total - 1)) * 100;
+    fill.style.width = pct + '%';
+  }
 }
 
 // ── PASO 0: IMAGEN IA ──
 function initImagen() {
   const container = document.getElementById('imagen-container');
   const img = DESAFIO_IMAGEN.src
-    ? `<img src="${DESAFIO_IMAGEN.src}" alt="${DESAFIO_IMAGEN.titulo}" style="width:100%;border-radius:12px;margin-bottom:1.2rem;display:block;">`
-    : `<div style="width:100%;aspect-ratio:16/9;background:var(--rose-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;color:var(--rose);font-size:3rem;">🏖️</div>`;
+    ? `<img src="${DESAFIO_IMAGEN.src}" alt="${DESAFIO_IMAGEN.titulo}" class="future-photo-img">`
+    : `<div class="future-photo-placeholder"><span>🏖️</span></div>`;
 
   container.innerHTML = `
-    ${img}
-    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.8rem;color:var(--ink)">${DESAFIO_IMAGEN.titulo}</h3>
-    ${DESAFIO_IMAGEN.texto.split('\n').map(p => p.trim() ? `<p style="font-size:0.95rem;line-height:1.8;color:var(--ink-soft);margin-bottom:0.8rem">${p.trim()}</p>` : '').join('')}
+    <div class="future-photo-frame">
+      ${img}
+      <div class="future-photo-shine"></div>
+    </div>
+    <h3 class="future-photo-title">${DESAFIO_IMAGEN.titulo}</h3>
+    ${DESAFIO_IMAGEN.texto.split('\n').map((p, i) => p.trim() ? `<p class="future-photo-text" style="--d:${i * .12}s">${p.trim()}</p>` : '').join('')}
   `;
 }
 
@@ -154,15 +163,16 @@ let todoOrder = [];
 
 function initTodo() {
   todoOrder = TODO_ITEMS.map((_, i) => i);
-  renderTodoList();
+  renderTodoList(true);
 }
 
-function renderTodoList() {
+function renderTodoList(animateIn) {
   const container = document.getElementById('todo-container');
   container.innerHTML = todoOrder.map((itemIndex, pos) => {
     const item = TODO_ITEMS[itemIndex];
+    const style = animateIn ? `style="--d:${pos * .07}s" class="todo-item todo-item--in"` : `class="todo-item"`;
     return `
-    <div class="todo-item" draggable="true" data-index="${itemIndex}"
+    <div ${style} draggable="true" data-index="${itemIndex}"
          ondragstart="todoDragStart(event, ${itemIndex})"
          ondragover="todoDragOver(event)"
          ondrop="todoDrop(event, ${itemIndex})"
@@ -222,24 +232,26 @@ function renderFuturoQuestion(index) {
   const pct = (index / FUTURO_QUESTIONS.length) * 100;
 
   container.innerHTML = `
-    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
-    <p class="quiz-counter">Pregunta ${index + 1} de ${FUTURO_QUESTIONS.length}</p>
-    <p class="quiz-question">${q.pregunta}</p>
-    <div class="futuro-input-wrap">
-      <input
-        type="text"
-        class="futuro-input"
-        id="futuro-input-${index}"
-        placeholder="${q.placeholder || 'Escribí lo que quieras...'}"
-        autocomplete="off"
-      >
-      <button class="btn btn-primary" id="futuro-btn" style="margin-top:0.8rem;width:100%" onclick="submitFuturo('${q.id}', ${index})">
-        Siguiente →
-      </button>
+    <div class="quiz-card">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+      <p class="quiz-counter">Pregunta ${index + 1} de ${FUTURO_QUESTIONS.length}</p>
+      <p class="quiz-question">${q.pregunta}</p>
+      <div class="futuro-input-wrap">
+        <input
+          type="text"
+          class="futuro-input"
+          id="futuro-input-${index}"
+          placeholder="${q.placeholder || 'Escribí lo que quieras...'}"
+          autocomplete="off"
+        >
+        <button class="btn btn-primary" id="futuro-btn" style="margin-top:0.8rem;width:100%" onclick="submitFuturo('${q.id}', ${index})">
+          Siguiente →
+        </button>
+      </div>
+      <p class="futuro-input-error" id="futuro-error" style="display:none;color:#f09090;font-size:0.85rem;margin-top:0.4rem">
+        Escribí algo antes de continuar 😊
+      </p>
     </div>
-    <p class="futuro-input-error" id="futuro-error" style="display:none;color:#a32d2d;font-size:0.85rem;margin-top:0.4rem">
-      Escribí algo antes de continuar 😊
-    </p>
   `;
 
   // Foco automático y envío con Enter
@@ -259,14 +271,24 @@ function submitFuturo(id, index) {
     return;
   }
   futuroAnswers[id] = val;
-  renderFuturoQuestion(index + 1);
+  const container = document.getElementById('futuro-container');
+  const card = container.querySelector('.quiz-card');
+  if (card) {
+    card.classList.add('quiz-card--exit');
+    setTimeout(() => renderFuturoQuestion(index + 1), 220);
+  } else {
+    renderFuturoQuestion(index + 1);
+  }
 }
 
 function renderFuturoLoading() {
   document.getElementById('futuro-container').innerHTML = `
-    <div style="text-align:center;padding:3rem 1rem">
-      <div class="ai-spinner"></div>
-      <p style="color:var(--ink-soft);margin-top:1rem;font-size:0.95rem">La IA está construyendo su futuro...</p>
+    <div class="quiz-loading">
+      <div class="quiz-loading-orbit">
+        <div class="ai-spinner"></div>
+        <span class="quiz-loading-icon">✦</span>
+      </div>
+      <p class="quiz-loading-text">Construyendo nuestro futuro<span class="quiz-loading-dots"><i>.</i><i>.</i><i>.</i></span></p>
     </div>
   `;
 }
@@ -326,7 +348,7 @@ El tono tiene que ser divertido e ingenioso, no romántico ni poético. Usá las
   } catch (err) {
     document.getElementById('futuro-container').innerHTML = `
       <div class="quiz-feedback wrong" style="display:block">
-        Hubo un error conectando con la IA. Revisá la API key en script.js.
+        Hubo un error conectando con la IA. Decile al Franco que lo arregle.
       </div>
       <div class="mt-3 text-center">
         <button class="btn btn-secondary" onclick="initFuturo()">Reintentar</button>
@@ -339,7 +361,7 @@ function renderFuturoResult(texto) {
   const parrafos = texto.split('\n').filter(p => p.trim());
   document.getElementById('futuro-container').innerHTML = `
     <div class="carta-paper" style="margin-bottom:1.5rem">
-      <p style="font-size:0.75rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Tu futuro, según la IA ✨</p>
+      <p style="font-size:0.75rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Nuestro Futuro✨</p>
       ${parrafos.map(p => `<p style="font-size:0.95rem">${p}</p>`).join('')}
     </div>
     <div class="text-center">
@@ -600,28 +622,62 @@ function formatDate(dateStr) {
 }
 
 // ── MURO DE FOTOS ──
+const WALL_SLOTS_TOTAL = 6;
+
 function renderWall() {
   const grid = document.getElementById('wall-grid');
-  grid.innerHTML = '';
-  if (WALL_PHOTOS.length === 0) {
-    grid.innerHTML = `
-      <div class="wall-empty">
-        <div class="wall-empty-icon">📷</div>
-        <p>Todavía no hay fotos acá.</p>
-        <p style="margin-top:0.3rem">Se van a ir sumando cada vez que cumplamos un regalo.</p>
-      </div>
-    `;
-    return;
+  const rotations = [-5, 4, -3, 6, -4, 3];
+  let html = '<div class="clothesline"><div class="clothesline-rope"></div><div class="clothesline-items">';
+
+  for (let i = 0; i < WALL_SLOTS_TOTAL; i++) {
+    const photo = WALL_PHOTOS[i];
+    const rot = rotations[i % rotations.length];
+
+    if (photo) {
+      html += `
+        <div class="clothes-slot" style="--rot:${rot}deg; --d:${i * .08}s">
+          <span class="clothes-peg"></span>
+          <div class="clothes-photo">
+            <img src="${photo.src}" alt="${photo.caption || ''}">
+            <div class="clothes-caption">${photo.caption || ''}${photo.date ? `<br><span>${photo.date}</span>` : ''}</div>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="clothes-slot clothes-slot--empty" style="--rot:${rot}deg; --d:${i * .08}s">
+          <span class="clothes-peg"></span>
+          <div class="clothes-photo clothes-photo--empty">
+            <span class="clothes-empty-icon">🔒</span>
+            <span class="clothes-empty-num">${i + 1}</span>
+          </div>
+        </div>`;
+    }
   }
-  WALL_PHOTOS.forEach(photo => {
-    const div = document.createElement('div');
-    div.className = 'wall-photo';
-    div.innerHTML = `
-      <img src="${photo.src}" alt="${photo.caption}">
-      <div class="wall-photo-caption">${photo.caption}<br><span style="opacity:0.7;font-size:0.7rem">${photo.date}</span></div>
-    `;
-    grid.appendChild(div);
-  });
+
+  html += '</div></div>';
+  grid.innerHTML = html;
+  applyFullBleed(grid);
+}
+
+// Mide la posición real del elemento y lo estira manualmente de borde a borde
+// del viewport. No depende de ningún cálculo CSS sobre paddings/anchos de los
+// contenedores padre — mide y listo.
+function applyFullBleed(el) {
+  function update() {
+    el.style.width = '';
+    el.style.marginLeft = '';
+    el.style.marginRight = '';
+    const rect = el.getBoundingClientRect();
+    const vw = window.innerWidth;
+    el.style.width = vw + 'px';
+    el.style.marginLeft = (-rect.left) + 'px';
+    el.style.marginRight = (rect.left - vw + rect.width) + 'px';
+  }
+  requestAnimationFrame(update);
+  if (!el.dataset.fullBleedBound) {
+    window.addEventListener('resize', () => requestAnimationFrame(update));
+    el.dataset.fullBleedBound = '1';
+  }
 }
 
 // ── TABS ──
@@ -669,20 +725,20 @@ document.addEventListener('DOMContentLoaded', () => {
     /* top-left-extremo */
     { img:'bigben',  size:'xl', top:'-3%',    left:'-3%',   rot:-8,  dur:'8s',   delay:'0s',   op:.62 },
     /* top-center-izq */
-    { img:'austria', size:'lg', top:'-2%',    left:'22%',   rot: 4,  dur:'7.2s', delay:'1.1s', op:.56 },
+    { img:'playa', size:'lg', top:'-2%',    left:'22%',   rot: 4,  dur:'7.2s', delay:'1.1s', op:.56 },
     /* top-center-der */
-    { img:'noruega', size:'lg', top:'-2%',    right:'22%',  rot:-4,  dur:'7.8s', delay:'0.6s', op:.56 },
+    { img:'plane', size:'lg', top:'-2%',    right:'22%',  rot:-4,  dur:'7.8s', delay:'0.6s', op:.56 },
     /* top-right-extremo */
     { img:'ny',      size:'xl', top:'-3%',    right:'-3%',  rot: 7,  dur:'8.5s', delay:'0.3s', op:.62 },
 
     /* ── LADOS rectangulares: extremos ── */
-    { img:'plane',   size:'lg', top:'40%',    left:'-3%',   rot:-7,  dur:'9s',   delay:'1.8s', op:.55 },
+    { img:'paris',   size:'lg', top:'40%',    left:'-3%',   rot:-7,  dur:'9s',   delay:'1.8s', op:.55 },
     { img:'brasil',  size:'lg', top:'40%',    right:'-3%',  rot: 8,  dur:'8.8s', delay:'2.2s', op:.55 },
 
 
     /* ── BOTTOM: 4 fotos a lo largo ── */
-    { img:'playa',   size:'xl', bottom:'-3%', left:'-3%',   rot: 9,  dur:'9.5s', delay:'0.8s', op:.62 },
-    { img:'paris',   size:'lg', bottom:'-2%', left:'22%',   rot:-4,  dur:'8s',   delay:'1.5s', op:.56 },
+    { img:'noruega',   size:'xl', bottom:'-3%', left:'-3%',   rot: 9,  dur:'9.5s', delay:'0.8s', op:.62 },
+    { img:'austria',   size:'lg', bottom:'-2%', left:'22%',   rot:-4,  dur:'8s',   delay:'1.5s', op:.56 },
     { img:'italia',  size:'lg', bottom:'-2%', right:'22%',  rot: 5,  dur:'7.5s', delay:'0.4s', op:.56 },
     { img:'bigben',  size:'xl', bottom:'-3%', right:'-3%',  rot:-7,  dur:'8.2s', delay:'1.2s', op:.62 },
   ];
