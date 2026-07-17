@@ -2233,6 +2233,45 @@ body {
 }
 .flyer-image:hover { transform: scale(1.015); }
 
+/* Flechas de navegación del flyer */
+.flyer-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(200,150,58,.9);
+  color: #1a0d04;
+  border: none;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  font-size: 1.1rem;
+  font-family: 'Fraunces', serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+  transition: transform .18s ease, background .2s ease;
+  opacity: .8;
+}
+.flyer-arrow:hover { background: var(--hgold); transform: translateY(-50%) scale(1.1); opacity: 1; }
+.flyer-arrow--prev { left: -52px; }
+.flyer-arrow--next { right: -52px; }
+
+.flyer-counter {
+  text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(242,228,204,.35);
+  margin-top: .2rem;
+  flex-shrink: 0;
+}
+
+/* Oculta flechas si solo hay 1 imagen (clase .flyer-single en .flyer-stage opcional) */
+.flyer-single .flyer-arrow { display: none; }
+
 .flyer-title {
   text-align: center;
   font-family: 'Cormorant Garamond', serif;
@@ -2257,6 +2296,44 @@ body {
   z-index: 2;
 }
 .flyer-close:hover { transform: scale(1.1) rotate(90deg); }
+
+/* Flechas y contador para navegación de 2 fotos */
+.flyer-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(200,150,58,.9);
+  color: #1a0d04;
+  border: none;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  font-size: 1.1rem;
+  font-family: 'Fraunces', serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+  transition: transform .2s ease, background .2s ease;
+  opacity: .9;
+}
+.flyer-arrow:hover { background: var(--hgold); transform: translateY(-50%) scale(1.1); opacity: 1; }
+.flyer-arrow--prev { left: -52px; }
+.flyer-arrow--next { right: -52px; }
+
+.flyer-single .flyer-arrow { display: none !important; }
+
+.flyer-counter {
+  text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(242,228,204,.35);
+  margin-top: .2rem;
+  flex-shrink: 0;
+}
 
 @media (max-width: 640px) {
   .flyer-stage { width: 86vw; }
