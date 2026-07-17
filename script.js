@@ -60,8 +60,8 @@ const GIFTS = [
     name: "Una noche especial",
     hint: "En el momento indicado, recibiras la clave. Estate atenta",
     unlockPassword: "rigoletto",
-    flyer: ["assets/noche_1.png", "assets/noche_2.png", "assets/noche_3.png"] // <-- Agregá 2 fotos como array (ej. assets/noche_1.webp, assets/noche_2.webp)
-    // Para una sola foto seguí usando un string: flyer: "cena"
+    flyer: ["assets/noche_1.png", "assets/noche_2.png", "assets/noche_3.png"]
+    // Ejemplo: array = 2+ fotos con navegación por flechas. Usá string simple (ej. flyer: "cena") para una sola.
   },
   {
     id: "gift-primavera",
@@ -604,9 +604,16 @@ function openGiftFlyer(giftName, flyerKeyOrArr) {
   // Determinar el array de imágenes: puede ser string o array
   let sources = [];
   if (Array.isArray(flyerKeyOrArr)) {
-    sources = flyerKeyOrArr.map(k => `assets/${k}.webp`);
+    sources = flyerKeyOrArr.map(k => {
+      if (k.match(/\.(png|jpg|jpeg|webp)$/i)) return `assets/${k}`;
+      return `assets/${k}.webp`;
+    });
   } else if (typeof flyerKeyOrArr === 'string' && flyerKeyOrArr) {
-    sources = [`assets/${flyerKeyOrArr}.webp`];
+    if (flyerKeyOrArr.match(/\.(png|jpg|jpeg|webp)$/i)) {
+      sources = [`assets/${flyerKeyOrArr}`];
+    } else {
+      sources = [`assets/${flyerKeyOrArr}.webp`];
+    }
   } else {
     sources = [];
   }
