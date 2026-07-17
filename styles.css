@@ -2196,7 +2196,8 @@ body {
 
 .flyer-content {
   position: relative;
-  z-index: 1;
+  /* Debe quedar sobre las hojas: las flechas viven dentro de este contenedor. */
+  z-index: 4;
   width: 100%;
   height: 100%;
   display: flex;
