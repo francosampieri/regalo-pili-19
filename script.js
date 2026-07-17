@@ -2,35 +2,35 @@
 //  CONFIGURACIÓN ← TODO LO QUE TENÉS QUE EDITAR ESTÁ ACÁ
 // ══════════════════════════════════════════════════════════
 
-const MAIN_PASSWORD = "error";
+const MAIN_PASSWORD = "futuro";
 const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 
 const DESAFIO_IMAGEN = {
-  src: "assets/p_cana.png",
+  src: null,
   titulo: "Punta Cana",
   texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
-Desde el principio venimos soñando con este viaje, caminar juntos por esa playa, probar cada restaurante tematico, ese atardecer que todavía no vimos juntos.
+Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
 No sé cuándo, pero sé que va a pasar. Y cuando pase, nos vamos a acordar de este momento. Vos y yo leyendo esto.`
 };
 
 // Drag-to-rank: ordenar por ganas
 const TODO_ITEMS = [
-  { emoji: "🛩️", texto: "Viajar solos por primera vez" },
+  { emoji: "✈️", texto: "Viajar juntos a Europa" },
   { emoji: "🏖️", texto: "Ver un atardecer en el mar" },
-  { emoji: "🍷", texto: "Comer en una bodega o restaurante caro" },
+  { emoji: "🍝", texto: "Comer en una bodega o restoran caro" },
   { emoji: "🚗", texto: "Escapada en auto a Potrerillos" },
-  { emoji: "🌍", texto: "Recorrer Europa" },
-  { emoji: "🍔", texto: "Comer una smash en Estados Unidos" },
+  { emoji: "🍔", texto: "Comer una smash en Nueva York" },
   { emoji: "🍕", texto: "Comer pizza en Buenos Aires juntos" },
+  { emoji: "🐶", texto: "Tener nuestro primer perro" },
 ];
 
 const FUTURO_QUESTIONS = [
-  { id: "perro",  pregunta: "¿Qué perro vamos a tener?",                    placeholder: "Raza, Nombre" },
+  { id: "perro",  pregunta: "¿Qué perro vamos a tener?",                    placeholder: "Raza: Nombre" },
   { id: "hijos",  pregunta: "¿Cuántos hijos vamos a tener?",                placeholder: "Uno, dos, ninguno..." },
-  { id: "donde",  pregunta: "¿Dónde vamos a vivir?",                        placeholder: "Lugar, tipo de casa..." },
+  { id: "donde",  pregunta: "¿Dónde vamos a vivir?",                        placeholder: "En Mendoza, afuera del país..." },
   { id: "luna",   pregunta: "¿Cómo va a ser nuestra luna de miel?",         placeholder: "Destino, plan..." },
-  { id: "hobby",  pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?", placeholder: "Algo que en 20 años vamos a seguir disfrutando juntos..." },
-  { id: "lugar",  pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?", placeholder: "El lugar al que siempre volveremos..." },
+  { id: "hobby",  pregunta: "¿Cuál va a ser nuestro hobby juntos preferido?", placeholder: "Algo que los dos disfrutemos..." },
+  { id: "lugar",  pregunta: "¿Cuál va a ser nuestro lugar de comida preferido?", placeholder: "El lugar al que siempre volvemos..." },
 ];
 
 // 🎁 REGALOS
@@ -88,7 +88,7 @@ const GIFTS = [
     icon: "🛖",
     name: "???",
     hint: "Cuando subamos la ultima foto al album, obtendrás este regalo",
-    wallPhotosRequired: 5,
+    wallPhotosRequired: 4,
     flyer: "cabana"
   },
 ];
@@ -288,7 +288,7 @@ function renderFuturoLoading() {
         <div class="ai-spinner"></div>
         <span class="quiz-loading-icon">✦</span>
       </div>
-      <p class="quiz-loading-text">Construyendo nuestro futuro<span class="quiz-loading-dots"><i>.</i><i>.</i><i>.</i></span></p>
+      <p class="quiz-loading-text">La IA está construyendo su futuro<span class="quiz-loading-dots"><i>.</i><i>.</i><i>.</i></span></p>
     </div>
   `;
 }
@@ -348,7 +348,7 @@ El tono tiene que ser divertido e ingenioso, no romántico ni poético. Usá las
   } catch (err) {
     document.getElementById('futuro-container').innerHTML = `
       <div class="quiz-feedback wrong" style="display:block">
-        Hubo un error conectando con la IA. Decile al Franco que lo arregle.
+        Hubo un error conectando con la IA. Revisá la API key en script.js.
       </div>
       <div class="mt-3 text-center">
         <button class="btn btn-secondary" onclick="initFuturo()">Reintentar</button>
@@ -361,7 +361,7 @@ function renderFuturoResult(texto) {
   const parrafos = texto.split('\n').filter(p => p.trim());
   document.getElementById('futuro-container').innerHTML = `
     <div class="carta-paper" style="margin-bottom:1.5rem">
-      <p style="font-size:0.75rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Nuestro Futuro✨</p>
+      <p style="font-size:0.75rem;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">Tu futuro, según la IA ✨</p>
       ${parrafos.map(p => `<p style="font-size:0.95rem">${p}</p>`).join('')}
     </div>
     <div class="text-center">
@@ -508,7 +508,7 @@ function renderGifts() {
 
     } else if (gift.type === 'wall') {
       const uploaded = WALL_PHOTOS.length;
-      const required = gift.wallPhotosRequired || 5;
+      const required = gift.wallPhotosRequired || 4;
       if (uploaded >= required) {
         isLocked = false;
         badgeHtml = `<span class="gift-badge badge-available">✓ Desbloqueado</span>`;
@@ -725,20 +725,20 @@ document.addEventListener('DOMContentLoaded', () => {
     /* top-left-extremo */
     { img:'bigben',  size:'xl', top:'-3%',    left:'-3%',   rot:-8,  dur:'8s',   delay:'0s',   op:.62 },
     /* top-center-izq */
-    { img:'playa', size:'lg', top:'-2%',    left:'22%',   rot: 4,  dur:'7.2s', delay:'1.1s', op:.56 },
+    { img:'austria', size:'lg', top:'-2%',    left:'22%',   rot: 4,  dur:'7.2s', delay:'1.1s', op:.56 },
     /* top-center-der */
-    { img:'plane', size:'lg', top:'-2%',    right:'22%',  rot:-4,  dur:'7.8s', delay:'0.6s', op:.56 },
+    { img:'noruega', size:'lg', top:'-2%',    right:'22%',  rot:-4,  dur:'7.8s', delay:'0.6s', op:.56 },
     /* top-right-extremo */
     { img:'ny',      size:'xl', top:'-3%',    right:'-3%',  rot: 7,  dur:'8.5s', delay:'0.3s', op:.62 },
 
     /* ── LADOS rectangulares: extremos ── */
-    { img:'paris',   size:'lg', top:'40%',    left:'-3%',   rot:-7,  dur:'9s',   delay:'1.8s', op:.55 },
+    { img:'plane',   size:'lg', top:'40%',    left:'-3%',   rot:-7,  dur:'9s',   delay:'1.8s', op:.55 },
     { img:'brasil',  size:'lg', top:'40%',    right:'-3%',  rot: 8,  dur:'8.8s', delay:'2.2s', op:.55 },
 
 
     /* ── BOTTOM: 4 fotos a lo largo ── */
-    { img:'noruega',   size:'xl', bottom:'-3%', left:'-3%',   rot: 9,  dur:'9.5s', delay:'0.8s', op:.62 },
-    { img:'austria',   size:'lg', bottom:'-2%', left:'22%',   rot:-4,  dur:'8s',   delay:'1.5s', op:.56 },
+    { img:'playa',   size:'xl', bottom:'-3%', left:'-3%',   rot: 9,  dur:'9.5s', delay:'0.8s', op:.62 },
+    { img:'paris',   size:'lg', bottom:'-2%', left:'22%',   rot:-4,  dur:'8s',   delay:'1.5s', op:.56 },
     { img:'italia',  size:'lg', bottom:'-2%', right:'22%',  rot: 5,  dur:'7.5s', delay:'0.4s', op:.56 },
     { img:'bigben',  size:'xl', bottom:'-3%', right:'-3%',  rot:-7,  dur:'8.2s', delay:'1.2s', op:.62 },
   ];
@@ -806,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const portraits = [
       {
         src:   'assets/couple.jpg',
-        left:  '14%',
+        left:  '10%',
         top:   '18%',
         rot:   6,
         delay: '1.4s',
@@ -814,7 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       {
         src:   'assets/beach_portrait.jpg',
-        right: '14%',
+        right: '10%',
         top:   '18%',
         rot:   -5,
         delay: '1.4s',

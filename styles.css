@@ -837,13 +837,52 @@ body {
 
 /* ─── RESPONSIVE ────────────────────────── */
 @media (max-width:640px) {
-  html,body { overflow:auto; }
-  .hero { height:auto; min-height:100vh; padding: 3rem 0; }
-  .hero__19 { font-size:28vw; }
-  .pol--xl .pol__frame { width:240px; }
-  .pol--xl .pol__photo { width:228px; height:114px; }
-  .pol--lg .pol__frame { width:200px; }
-  .pol--lg .pol__photo { width:188px; height:94px; }
+  html,body { overflow-x:hidden; overflow-y:auto; }
+  .hero {
+    height:auto; min-height:100vh; padding: 2.4rem 0 2rem;
+    overflow: hidden;
+    flex-direction: column;
+  }
+  .hero__19 { font-size:26vw; }
+
+  /* Ocultamos el collage decorativo de fondo: en pantallas chicas
+     10 polaroids grandes superpuestos generaban desborde horizontal
+     y tapaban el texto. Dejamos solo el ambiente (glow/ruido/viñeta). */
+  .hero__polaroids { display: none; }
+
+  /* Las fotos verticales de ella dejan de flotar en posiciones
+     absolutas (pensadas para pantallas anchas) y pasan a un
+     bloque centrado, en fila, debajo del texto. */
+  .hero__center   { order: 1; }
+  .hero__portraits {
+    order: 2;
+    position: relative;
+    inset: auto;
+    top: auto; left: auto; right: auto; bottom: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: .9rem;
+    margin-top: 1.6rem;
+    padding: 0 1.2rem;
+  }
+  .pol--portrait {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+  }
+  .pol--portrait .pol__frame {
+    width: 42vw !important;
+    max-width: 165px !important;
+  }
+  .pol--portrait .pol__photo {
+    width: 100% !important;
+    height: 52vw !important;
+    max-height: 210px !important;
+  }
+
+  .hero__center { padding: 0 1.4rem; }
 }
 
 /* ╔══════════════════════════════════════════════════════════╗
@@ -1954,6 +1993,19 @@ body {
 @media (max-width: 640px) {
   .box-open-base { font-size: 4.6rem; }
   .box-open-scene { width: 120px; height: 120px; }
+  .box-open-lid { font-size: 2rem; }
+  .box-open-text {
+    font-size: 1rem;
+    padding: 0 1.6rem;
+    text-align: center;
+    max-width: 320px;
+  }
+  .box-open-sparks span:nth-child(1) { --tx: -90px;  --ty: -90px; }
+  .box-open-sparks span:nth-child(2) { --tx: 90px;   --ty: -100px; }
+  .box-open-sparks span:nth-child(3) { --tx: -110px; --ty: 45px; }
+  .box-open-sparks span:nth-child(4) { --tx: 105px;  --ty: 55px; }
+  .box-open-sparks span:nth-child(5) { --tx: -40px;  --ty: -130px; }
+  .box-open-sparks span:nth-child(6) { --tx: 45px;   --ty: -135px; }
 }
 
 /* ═══════════════════════════════════════════
