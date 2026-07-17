@@ -2,11 +2,11 @@
 //  CONFIGURACIÓN ← TODO LO QUE TENÉS QUE EDITAR ESTÁ ACÁ
 // ══════════════════════════════════════════════════════════
 
-const MAIN_PASSWORD = "futuro";
+const MAIN_PASSWORD = "error";
 const GEMINI_API_KEY = "AQ.Ab8RN6KnKYvz6m-DaqyZYljGw6ZFM3vPOWX0SlTchTjBD1l0eg";
 
 const DESAFIO_IMAGEN = {
-  src: null,
+  src: "assets/p_cana.png",
   titulo: "Punta Cana",
   texto: `Esta foto todavía no existe en nuestra galeria. Pero va a existir.
 Desde el principio hablamos siempre de este viaje, de caminar juntos por esa playa, de probar cada restaurant tematico, de ese atardecer que todavía no vimos juntos.
@@ -60,7 +60,8 @@ const GIFTS = [
     name: "Una noche especial",
     hint: "En el momento indicado, recibiras la clave. Estate atenta",
     unlockPassword: "rigoletto",
-    flyer: "noche"
+    flyer: ["assets/noche_1.png", "assets/noche_2.png", "assets/noche_3.png"] // <-- Agregá 2 fotos como array (ej. assets/noche_1.webp, assets/noche_2.webp)
+    // Para una sola foto seguí usando un string: flyer: "cena"
   },
   {
     id: "gift-primavera",
@@ -106,6 +107,10 @@ let currentStep = 0;
 const TOTAL_STEPS = 4;
 let futuroAnswers = {};
 let dragSrcIndex = null;
+
+// Navegación del flyer con 2 imágenes
+let currentFlyerImages = [];
+let currentFlyerIndex = 0;
 
 // ── NAVEGACIÓN ENTRE PANTALLAS ──
 function goTo(screenId) {
@@ -590,18 +595,71 @@ function unlockWithPassword(giftId, correctPw) {
 }
 
 // ── ANIMACIÓN: ABRIR EL FLYER DE UN REGALO ──
-function openGiftFlyer(giftName, flyerKey) {
+function openGiftFlyer(giftName, flyerKeyOrArr) {
   const overlay = document.getElementById('giftFlyerOverlay');
   const img = document.getElementById('giftFlyerImg');
   const title = document.getElementById('giftFlyerTitle');
+  const counter = document.getElementById('giftFlyerCounter');
 
-  img.src = `assets/${flyerKey}.webp`;
-  title.textContent = giftName === '???' ? '' : giftName;
+  // Determinar el array de imágenes: puede ser string o array
+  let sources = [];
+  if (Array.isArray(flyerKeyOrArr)) {
+    sources = flyerKeyOrArr.map(k => `assets/${k}.webp`);
+  } else if (typeof flyerKeyOrArr === 'string' && flyerKeyOrArr) {
+    sources = [`assets/${flyerKeyOrArr}.webp`];
+  } else {
+    sources = [];
+  }
+
+  currentFlyerImages = sources;
+  currentFlyerIndex = 0;
+
+  function renderFlyer(index) {
+    if (!currentFlyerImages.length) {
+      img.src = '';
+      counter.textContent = '';
+      return;
+    }
+    img.src = currentFlyerImages[index];
+    title.textContent = giftName === '???' ? '' : giftName;
+    if (currentFlyerImages.length > 1) {
+      counter.textContent = `${index + 1} / ${currentFlyerImages.length}`;
+    } else {
+      counter.textContent = '';
+    }
+  }
+
+  renderFlyer(0);
+
+  // Añadir clase para ocultar flechas si solo hay 1 imagen
+  if (currentFlyerImages.length <= 1) {
+    overlay.classList.add('flyer-single');
+  } else {
+    overlay.classList.remove('flyer-single');
+  }
 
   overlay.classList.add('flyer-overlay--visible');
   requestAnimationFrame(() => {
     setTimeout(() => overlay.classList.add('flyer-overlay--open'), 60);
   });
+}
+
+function flyerNav(dir) {
+  if (!currentFlyerImages.length) return;
+  currentFlyerIndex = (currentFlyerIndex + dir + currentFlyerImages.length) % currentFlyerImages.length;
+  const img = document.getElementById('giftFlyerImg');
+  const counter = document.getElementById('giftFlyerCounter');
+  img.style.opacity = '.6';
+  img.style.transition = 'opacity .15s ease';
+  setTimeout(() => {
+    img.src = currentFlyerImages[currentFlyerIndex];
+    img.style.opacity = '1';
+    if (currentFlyerImages.length > 1) {
+      counter.textContent = `${currentFlyerIndex + 1} / ${currentFlyerImages.length}`;
+    } else {
+      counter.textContent = '';
+    }
+  }, 150);
 }
 
 function closeGiftFlyer() {
