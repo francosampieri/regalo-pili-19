@@ -60,7 +60,7 @@ const GIFTS = [
     name: "Una noche especial",
     hint: "En el momento indicado, recibiras la clave. Estate atenta",
     unlockPassword: "rigoletto",
-    flyer: ["assets/noche_1", "assets/noche_2", "assets/noche_3"]
+    flyer: ["assets/noche_1.webp", "assets/noche_2.webp", "assets/noche_3.webp"]
     // Ejemplo: array = 2+ fotos con navegación por flechas. Usá string simple (ej. flyer: "cena") para una sola.
   },
   {
