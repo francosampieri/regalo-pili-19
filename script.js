@@ -51,8 +51,7 @@ const GIFTS = [
     icon: "🍽️",
     name: "Una cena especial",
     hint: "¡Este regalo ya está listo para vos! ¡Prepárate para una noche increíble!",
-    flyer: "cena.png",
-    description: "Estás invitada a comer sushi libre en Shiiko 🍣\n\nNo te preocupes por el cuándo o el cómo; no hay fechas ni horarios fijos. ¡Lo coordinamos nosotros cuando vos quieras disfrutar de una noche espectacular! 🥢"
+    flyer: "cena.png"
   },
   {
     id: "gift-noche",
@@ -601,12 +600,6 @@ function openGiftFlyer(giftName, flyerKeyOrArr) {
   const img = document.getElementById('giftFlyerImg');
   const title = document.getElementById('giftFlyerTitle');
   const counter = document.getElementById('giftFlyerCounter');
-  const descEl = document.getElementById('giftFlyerDescription');
-
-  const gift = GIFTS.find(g => g.name === giftName || g.flyer === flyerKeyOrArr || (Array.isArray(g.flyer) && g.flyer.includes(flyerKeyOrArr)));
-  if (descEl) {
-    descEl.textContent = gift && gift.description ? gift.description : '';
-  }
 
   // Determinar el array de imágenes: puede ser string o array
   let sources = [];

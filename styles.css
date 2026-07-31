@@ -2282,18 +2282,6 @@ body {
   margin-top: .8rem;
   flex-shrink: 0;
 }
-.flyer-description {
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--hcream);
-  opacity: 0.85;
-  margin-top: 0.4rem;
-  padding: 0 0.8rem;
-  flex-shrink: 0;
-  white-space: pre-wrap;
-}
 .flyer-close {
   position: absolute;
   top: -14px; right: -14px;
