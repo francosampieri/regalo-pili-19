@@ -47,21 +47,19 @@ const GIFTS = [
   },
   {
     id: "gift-cena",
-    type: "surprise",
+    type: "available",
     icon: "🍽️",
-    name: "???",
-    hint: "¡Este regalo es para este mes! Yo que vos revisaria la pagina seguido..",
-    flyer: "cena"
+    name: "Una cena especial",
+    hint: "¡Este regalo ya está listo para vos! ¡Prepárate para una noche increíble!",
+    flyer: "cena.png"
   },
   {
     id: "gift-noche",
-    type: "password",
+    type: "available",
     icon: "🕯️",
     name: "Una noche especial",
-    hint: "En el momento indicado, recibiras la clave. Estate atenta",
-    unlockPassword: "rigoletto",
+    hint: "¡Este regalo ya fue desbloqueado con la clave correcta!",
     flyer: ["noche_1.webp", "noche_2.webp", "noche_3.webp"]
-    // Ejemplo: array = 2+ fotos con navegación por flechas. Usá string simple (ej. flyer: "cena") para una sola.
   },
   {
     id: "gift-primavera",
