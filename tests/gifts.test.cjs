@@ -140,10 +140,12 @@ test('multiple image invitation keeps navigation and wraps in both directions', 
   assert.equal(page.document.getElementById('giftFlyerImg').src, 'assets/noche_2.webp');
 });
 
-test('spring gift opens its surprise invitation when its date has arrived', () => {
+test('spring gift opens its invitation image with the exact title and description', () => {
   const page = loadPage();
   const card = page.cards()[3];
   assert.ok(!card.classList.contains('locked'));
+  assert.match(card.innerHTML, /<h3 class="gift-name">¿Preparada para perder\?<\/h3>/);
+  assert.match(card.innerHTML, /<p class="gift-hint">De la Wii a la realidad<\/p>/);
   const opening = card.innerHTML.match(/onclick="([^"]+)"[^>]*>Abrir<\/button>/);
   assert.ok(opening, 'spring gift must have an enabled opening button');
   page.evaluate(opening[1]);
@@ -151,14 +153,22 @@ test('spring gift opens its surprise invitation when its date has arrived', () =
   const overlay = page.document.getElementById('giftFlyerOverlay');
   const message = page.document.getElementById('giftFlyerMessage');
   assert.ok(overlay.classList.contains('flyer-overlay--open'));
-  assert.equal(page.document.getElementById('giftFlyerTitle').textContent, 'Un rato para nosotros');
-  assert.equal(message.hidden, false);
-  assert.equal(message.textContent, 'Guardate un rato para nosotros.\nVos vení con ganas de pasarla bien; del resto me encargo yo.\nLa sorpresa empieza cuando lleguemos.');
-  assert.equal(page.document.getElementById('giftFlyerImg').hidden, true);
+  assert.equal(page.document.getElementById('giftFlyerTitle').textContent, '¿Preparada para perder?');
+  assert.equal(message.hidden, true);
+  assert.equal(message.textContent, '');
+  const image = page.document.getElementById('giftFlyerImg');
+  assert.equal(image.hidden, false);
+  assert.equal(image.src, 'assets/primavera.png');
+  const imageBytes = fs.readFileSync(path.join(__dirname, '..', image.src));
+  assert.equal(imageBytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
   assert.ok(overlay.classList.contains('flyer-single'));
+  assert.ok(!overlay.classList.contains('flyer-text'));
+  page.context.toggleFlyerZoom();
+  assert.ok(overlay.classList.contains('flyer-overlay--zoomed'));
   page.context.closeGiftFlyer();
   page.flushTimers();
   assert.ok(!overlay.classList.contains('flyer-overlay--visible'));
+  assert.ok(!overlay.classList.contains('flyer-overlay--zoomed'));
 });
 
 test('spring opening respects the original date boundary', () => {
@@ -173,12 +183,34 @@ test('spring opening respects the original date boundary', () => {
   assert.doesNotMatch(atDate.innerHTML, /disabled|password-unlock-form/);
 });
 
-test('switching between text and image invitations resets content and navigation', () => {
+test('opening another gift after spring restores its image gallery', () => {
+  const page = loadPage();
+  const card = page.cards()[2];
+  page.context.openGift('gift-primavera');
+  page.context.closeGiftFlyer();
+  page.flushTimers();
+
+  const input = page.document.getElementById('pw-gift-noche');
+  input.closest = () => card;
+  page.evaluate("document.getElementById('pw-gift-noche').value = GIFTS[2].unlockPassword");
+  page.evaluate("unlockWithPassword('gift-noche', GIFTS[2].unlockPassword)");
+  page.flushTimers();
+  const overlay = page.document.getElementById('giftFlyerOverlay');
+  assert.equal(page.document.getElementById('giftFlyerImg').src, 'assets/noche_1.webp');
+  assert.equal(page.document.getElementById('giftFlyerTitle').textContent, 'Una noche especial');
+  assert.equal(page.document.getElementById('giftFlyerCounter').textContent, '1 / 3');
+  assert.equal(page.document.getElementById('giftFlyerMessage').hidden, true);
+  assert.ok(!overlay.classList.contains('flyer-single'));
+  assert.ok(!overlay.classList.contains('flyer-text'));
+  assert.ok(overlay.classList.contains('flyer-overlay--open'));
+});
+
+test('switching between text, multiple images and spring resets content and navigation', () => {
   const page = loadPage();
   const overlay = page.document.getElementById('giftFlyerOverlay');
   const message = page.document.getElementById('giftFlyerMessage');
   const image = page.document.getElementById('giftFlyerImg');
-  page.context.openGift('gift-primavera');
+  page.context.openGiftFlyer('Un mensaje', undefined, 'Una invitación de texto.');
   assert.ok(overlay.classList.contains('flyer-text'));
   page.context.closeGiftFlyer();
   page.flushTimers();
@@ -194,8 +226,11 @@ test('switching between text and image invitations resets content and navigation
   page.flushTimers();
 
   page.context.openGift('gift-primavera');
-  assert.equal(message.hidden, false);
-  assert.equal(image.hidden, true);
+  assert.equal(message.hidden, true);
+  assert.equal(message.textContent, '');
+  assert.equal(image.hidden, false);
+  assert.equal(image.src, 'assets/primavera.png');
+  assert.ok(!overlay.classList.contains('flyer-text'));
   assert.equal(page.document.getElementById('giftFlyerCounter').textContent, '');
   assert.ok(overlay.classList.contains('flyer-single'));
   page.context.flyerNav(1);

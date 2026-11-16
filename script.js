@@ -67,11 +67,11 @@ const GIFTS = [
     id: "gift-primavera",
     type: "date",
     icon: "🌸",
-    name: "Un rato para nosotros",
-    hint: "El plan ya está pensado. Vos solo tenés que venir; el resto lo descubrís cuando lleguemos",
+    name: "¿Preparada para perder?",
+    hint: "De la Wii a la realidad",
     unlockDate: "2026-09-22",
     customLabel: "Cuando menos te lo esperes..",
-    message: "Guardate un rato para nosotros.\nVos vení con ganas de pasarla bien; del resto me encargo yo.\nLa sorpresa empieza cuando lleguemos."
+    flyer: "primavera.png"
   },
   {
     id: "gift-verano",
