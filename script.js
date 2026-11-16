@@ -67,11 +67,11 @@ const GIFTS = [
     id: "gift-primavera",
     type: "date",
     icon: "🌸",
-    name: "???",
-    hint: "Cuando empiece a pasar el frio y las flores vuelvan a florecer, este regalo va a aparecer",
+    name: "Un rato para nosotros",
+    hint: "El plan ya está pensado. Vos solo tenés que venir; el resto lo descubrís cuando lleguemos",
     unlockDate: "2026-09-22",
     customLabel: "Cuando menos te lo esperes..",
-    noOpen: true
+    message: "Guardate un rato para nosotros.\nVos vení con ganas de pasarla bien; del resto me encargo yo.\nLa sorpresa empieza cuando lleguemos."
   },
   {
     id: "gift-verano",
@@ -522,13 +522,13 @@ function renderGifts() {
       }
     }
 
-    // Botón "Abrir" → dispara la animación del flyer.
-    // Los regalos con noOpen (primavera, verano) no tienen botón ni interacción.
+    // Botón "Abrir" → dispara la animación de la invitación.
+    // Los regalos con noOpen no tienen botón ni interacción.
     let abrirBtnHtml = '';
-    if (!gift.noOpen && gift.type !== 'password' && gift.flyer) {
+    if (!gift.noOpen && gift.type !== 'password' && (gift.flyer || gift.message)) {
       abrirBtnHtml = isLocked
         ? `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`
-        : `<button class="btn gift-open-btn" onclick="openGiftFlyer('${gift.name}', '${gift.flyer}')">Abrir</button>`;
+        : `<button class="btn gift-open-btn" onclick="openGift('${gift.id}')">Abrir</button>`;
     } else if (!gift.noOpen && gift.type !== 'password' && isLocked) {
       abrirBtnHtml = `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`;
     }
@@ -595,11 +595,23 @@ function unlockWithPassword(giftId, correctPw) {
 }
 
 // ── ANIMACIÓN: ABRIR EL FLYER DE UN REGALO ──
-function openGiftFlyer(giftName, flyerKeyOrArr) {
+function openGift(giftId) {
+  const gift = GIFTS.find(g => g.id === giftId);
+  if (gift) openGiftFlyer(gift.name, gift.flyer, gift.message);
+}
+
+function openGiftFlyer(giftName, flyerKeyOrArr, message) {
   const overlay = document.getElementById('giftFlyerOverlay');
   const img = document.getElementById('giftFlyerImg');
   const title = document.getElementById('giftFlyerTitle');
   const counter = document.getElementById('giftFlyerCounter');
+  const invitation = document.getElementById('giftFlyerMessage');
+
+  title.textContent = giftName === '???' ? '' : giftName;
+  invitation.textContent = message || '';
+  invitation.hidden = !message;
+  img.hidden = !!message;
+  overlay.classList.toggle('flyer-text', !!message);
 
   // Determinar el array de imágenes: puede ser string o array
   let sources = [];
@@ -628,7 +640,6 @@ function openGiftFlyer(giftName, flyerKeyOrArr) {
       return;
     }
     img.src = currentFlyerImages[index];
-    title.textContent = giftName === '???' ? '' : giftName;
     if (currentFlyerImages.length > 1) {
       counter.textContent = `${index + 1} / ${currentFlyerImages.length}`;
     } else {

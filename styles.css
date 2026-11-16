@@ -2234,6 +2234,25 @@ body {
 }
 .flyer-image:hover { transform: scale(1.015); }
 
+/* Invitaciones de texto en el mismo visor. */
+.flyer-image[hidden] { display: none; }
+.flyer-text .flyer-stage { aspect-ratio: auto; }
+.flyer-text .flyer-content {
+  height: auto;
+  max-height: 84vh;
+  padding: 2rem 1.5rem 1.5rem;
+}
+.flyer-message {
+  min-height: 0;
+  overflow-y: auto;
+  white-space: pre-line;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--hcream);
+}
+.flyer-text .flyer-title { margin-top: 1.25rem; }
+
 /* Flechas de navegación del flyer */
 .flyer-arrow {
   position: absolute;
