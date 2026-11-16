@@ -103,7 +103,8 @@ const GIFTS = [
 ];
 
 const WALL_PHOTOS = [
-  // { src: "fotos/foto1.jpg", caption: "Primera vez que lo cumplimos ✨", date: "enero 2026" },
+  { src: "assets/muro-noche-especial.jpeg", caption: "Una noche especial" },
+  { src: "assets/muro-cena-sushi.jpeg", caption: "Sushi juntos" },
 ];
 
 // ══════════════════════════════════════════════════════════

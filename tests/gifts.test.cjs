@@ -10,7 +10,7 @@ function createElement() {
   const classes = new Set();
   return {
     innerHTML: '', textContent: '', value: '', src: '', hidden: false,
-    style: {}, children: [],
+    style: {}, dataset: {}, children: [],
     set className(value) {
       classes.clear();
       value.split(/\s+/).filter(Boolean).forEach(name => classes.add(name));
@@ -28,6 +28,7 @@ function createElement() {
     },
     appendChild(child) { this.children.push(child); },
     replaceChildren(...children) { this.children = children; },
+    getBoundingClientRect() { return { left: 16, width: 700 }; },
   };
 }
 
@@ -45,7 +46,7 @@ function loadPage(now = '2026-11-16T12:00:00') {
   };
   const context = vm.createContext({
     document,
-    window: { scrollTo() {} },
+    window: { scrollTo() {}, innerWidth: 1024, addEventListener() {} },
     Date: class extends Date {
       constructor(...args) { super(...(args.length ? args : [now])); }
     },
@@ -80,6 +81,7 @@ test('future date gifts stay locked and summer has no opening control', () => {
 
 test('wall gift unlocks only when four photos have been added', () => {
   const page = loadPage();
+  page.evaluate('WALL_PHOTOS.length = 0');
   assert.ok(page.cards()[5].classList.contains('locked'));
   page.evaluate('WALL_PHOTOS.push({}, {}, {})');
   assert.ok(page.cards()[5].classList.contains('locked'));
@@ -89,8 +91,54 @@ test('wall gift unlocks only when four photos have been added', () => {
   assert.match(card.innerHTML, />Abrir<\/button>/);
 });
 
+test('photo wall displays the two supplied photos and keeps four empty slots', () => {
+  const page = loadPage();
+  const photos = JSON.parse(page.evaluate('JSON.stringify(WALL_PHOTOS)'));
+  assert.deepEqual(photos, [
+    { src: 'assets/muro-noche-especial.jpeg', caption: 'Una noche especial' },
+    { src: 'assets/muro-cena-sushi.jpeg', caption: 'Sushi juntos' },
+  ]);
+  for (const photo of photos) {
+    const bytes = fs.readFileSync(path.join(__dirname, '..', photo.src));
+    assert.equal(bytes.subarray(0, 3).toString('hex'), 'ffd8ff');
+  }
+  page.context.renderWall();
+  const html = page.document.getElementById('wall-grid').innerHTML;
+  assert.match(html, /<img src="assets\/muro-noche-especial.jpeg" alt="Una noche especial">/);
+  assert.match(html, /<img src="assets\/muro-cena-sushi.jpeg" alt="Sushi juntos">/);
+  assert.equal((html.match(/<img /g) || []).length, 2);
+  assert.equal((html.match(/class="clothes-slot clothes-slot--empty"/g) || []).length, 4);
+  const finalGift = page.cards()[5];
+  assert.ok(finalGift.classList.contains('locked'));
+  assert.match(finalGift.innerHTML, /2\/4 fotos en el muro/);
+  assert.match(finalGift.innerHTML, /disabled/);
+});
+
+test('adding a third photo keeps the final gift sealed and the fourth unlocks it', () => {
+  const page = loadPage();
+  page.evaluate("WALL_PHOTOS.push({ src: WALL_PHOTOS[0].src, caption: 'Otra foto' })");
+  page.context.renderWall();
+  let html = page.document.getElementById('wall-grid').innerHTML;
+  assert.equal((html.match(/<img /g) || []).length, 3);
+  assert.equal((html.match(/class="clothes-slot clothes-slot--empty"/g) || []).length, 3);
+  let card = page.cards()[5];
+  assert.ok(card.classList.contains('locked'));
+  assert.match(card.innerHTML, /3\/4 fotos en el muro/);
+
+  page.evaluate("WALL_PHOTOS.push({ src: WALL_PHOTOS[1].src, caption: 'Una más' })");
+  page.context.renderWall();
+  html = page.document.getElementById('wall-grid').innerHTML;
+  assert.equal((html.match(/<img /g) || []).length, 4);
+  assert.equal((html.match(/class="clothes-slot clothes-slot--empty"/g) || []).length, 2);
+  card = page.cards()[5];
+  assert.ok(!card.classList.contains('locked'));
+  assert.match(card.innerHTML, />Abrir<\/button>/);
+  assert.doesNotMatch(card.innerHTML, /disabled/);
+});
+
 test('password gift rejects an incorrect password and opens its images with the right one', () => {
   const page = loadPage();
+  page.evaluate("Object.assign(GIFTS[2], { type: 'password', unlockPassword: 'clave-de-prueba' })");
   const card = page.cards()[2];
   const input = page.document.getElementById('pw-gift-noche');
   input.closest = () => card;
@@ -191,10 +239,9 @@ test('opening another gift after spring restores its image gallery', () => {
   page.context.closeGiftFlyer();
   page.flushTimers();
 
-  const input = page.document.getElementById('pw-gift-noche');
-  input.closest = () => card;
-  page.evaluate("document.getElementById('pw-gift-noche').value = GIFTS[2].unlockPassword");
-  page.evaluate("unlockWithPassword('gift-noche', GIFTS[2].unlockPassword)");
+  const opening = card.innerHTML.match(/onclick="([^"]+)"[^>]*>Abrir<\/button>/);
+  assert.ok(opening, 'the previously unlocked gift must open without asking for its password again');
+  page.evaluate(opening[1]);
   page.flushTimers();
   const overlay = page.document.getElementById('giftFlyerOverlay');
   assert.equal(page.document.getElementById('giftFlyerImg').src, 'assets/noche_1.webp');
@@ -204,6 +251,24 @@ test('opening another gift after spring restores its image gallery', () => {
   assert.ok(!overlay.classList.contains('flyer-single'));
   assert.ok(!overlay.classList.contains('flyer-text'));
   assert.ok(overlay.classList.contains('flyer-overlay--open'));
+});
+
+test('dinner and night gifts remain available with their existing invitations', () => {
+  const page = loadPage();
+  const cards = page.cards();
+  for (const [index, source] of [[1, 'assets/cena.png'], [2, 'assets/noche_1.webp']]) {
+    const card = cards[index];
+    assert.ok(!card.classList.contains('locked'));
+    assert.doesNotMatch(card.innerHTML, /password-unlock-form|disabled/);
+    const opening = card.innerHTML.match(/onclick="([^"]+)"[^>]*>Abrir<\/button>/);
+    assert.ok(opening);
+    page.evaluate(opening[1]);
+    page.flushTimers();
+    assert.equal(page.document.getElementById('giftFlyerImg').src, source);
+    assert.ok(fs.existsSync(path.join(__dirname, '..', source)));
+    page.context.closeGiftFlyer();
+    page.flushTimers();
+  }
 });
 
 test('switching between text, multiple images and spring resets content and navigation', () => {
