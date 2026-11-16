@@ -27,6 +27,7 @@ function createElement() {
       },
     },
     appendChild(child) { this.children.push(child); },
+    replaceChildren(...children) { this.children = children; },
   };
 }
 
@@ -246,4 +247,90 @@ test('invitation text is displayed literally without inserting HTML', () => {
   assert.equal(message.textContent, text);
   assert.equal(message.innerHTML, '');
   assert.equal(message.hidden, false);
+});
+
+test('time capsule stays sealed before its date even through direct opening', () => {
+  const page = loadPage('2027-06-21T23:59:59');
+  const card = page.cards()[0];
+  assert.ok(card.classList.contains('locked'));
+  assert.match(card.innerHTML, /<h3 class="gift-name">\?\?\?<\/h3>/);
+  assert.match(card.innerHTML, /Este sobre está sellado hasta tu próximo cumpleaños\./);
+  assert.match(card.innerHTML, /mini-countdown-gift-carta/);
+  assert.doesNotMatch(card.innerHTML, /Hola mi gorda|Christopher Nolan/);
+  page.context.openGift('gift-carta');
+  page.flushTimers();
+  assert.ok(!page.document.getElementById('giftFlyerOverlay').classList.contains('flyer-overlay--visible'));
+});
+
+test('time capsule opens the complete readable letter exactly on its date', () => {
+  const page = loadPage('2027-06-22T00:00:00');
+  const card = page.cards()[0];
+  assert.ok(!card.classList.contains('locked'));
+  const opening = card.innerHTML.match(/onclick="([^"]+)"[^>]*>Abrir<\/button>/);
+  assert.ok(opening, 'letter must have an opening button on its date');
+  page.evaluate(opening[1]);
+  page.flushTimers();
+  const overlay = page.document.getElementById('giftFlyerOverlay');
+  assert.ok(overlay.classList.contains('flyer-letter'));
+  assert.ok(overlay.classList.contains('flyer-overlay--open'));
+  assert.equal(page.document.getElementById('giftLetter').hidden, false);
+  assert.equal(page.document.getElementById('giftLetterDate').textContent, '20 de junio de 2026');
+  assert.equal(page.document.getElementById('giftLetterGreeting').textContent, 'Hola mi gorda');
+  const paragraphs = page.document.getElementById('giftLetterBody').children;
+  assert.equal(paragraphs.length, 5);
+  assert.match(paragraphs[0].textContent, /^Mientras leés esto estás cumpliendo 20 años/);
+  assert.match(paragraphs[0].textContent, /¿cuántas cosas vamos a haber vivido para ese entonces\?$/);
+  assert.match(paragraphs[1].textContent, /la compañía que nos damos día a día/);
+  assert.match(paragraphs[2].textContent, /conociéndote/);
+  assert.match(paragraphs[3].textContent, /¿Argentina ganó el mundial\?/);
+  assert.match(paragraphs[4].textContent, /Felices 19, 20 y los años que tengas cuando vuelvas a leer esta carta\. Te amo mucho$/);
+  assert.equal(page.document.getElementById('giftFlyerImg').hidden, true);
+  assert.equal(page.document.getElementById('giftFlyerCounter').textContent, '');
+});
+
+test('closing the letter and opening a photo clears paper mode, then reopens at the top', () => {
+  const page = loadPage('2027-06-22T12:00:00');
+  const overlay = page.document.getElementById('giftFlyerOverlay');
+  const paper = page.document.getElementById('giftLetter');
+  page.context.openGift('gift-carta');
+  page.flushTimers();
+  paper.scrollTop = 400;
+  page.context.closeGiftFlyer();
+  page.flushTimers();
+  assert.ok(!overlay.classList.contains('flyer-overlay--visible'));
+
+  page.context.openGift('gift-primavera');
+  page.flushTimers();
+  assert.equal(paper.hidden, true);
+  assert.ok(!overlay.classList.contains('flyer-letter'));
+  assert.ok(!overlay.classList.contains('flyer-text'));
+  assert.equal(page.document.getElementById('giftFlyerImg').hidden, false);
+  assert.equal(page.document.getElementById('giftFlyerImg').src, 'assets/primavera.png');
+  assert.equal(page.document.getElementById('giftLetterBody').children.length, 0);
+  page.context.closeGiftFlyer();
+  page.flushTimers();
+
+  page.context.openGift('gift-carta');
+  page.flushTimers();
+  assert.equal(paper.hidden, false);
+  assert.equal(paper.scrollTop, 0);
+  assert.equal(page.document.getElementById('giftLetterBody').children.length, 5);
+  assert.ok(overlay.classList.contains('flyer-letter'));
+});
+
+test('structured letter fields remain literal text rather than HTML', () => {
+  const page = loadPage();
+  const letter = {
+    date: '<b>Una fecha</b>',
+    greeting: '<em>Hola</em>',
+    paragraphs: ['<img src=x onerror=alert(1)>', 'Segundo párrafo.'],
+  };
+  page.context.openGiftFlyer('???', undefined, undefined, letter);
+  assert.equal(page.document.getElementById('giftLetterDate').textContent, letter.date);
+  assert.equal(page.document.getElementById('giftLetterGreeting').textContent, letter.greeting);
+  const paragraphs = page.document.getElementById('giftLetterBody').children;
+  assert.equal(paragraphs.length, 2);
+  assert.equal(paragraphs[0].textContent, letter.paragraphs[0]);
+  assert.equal(paragraphs[0].innerHTML, '');
+  assert.equal(paragraphs[1].textContent, letter.paragraphs[1]);
 });
