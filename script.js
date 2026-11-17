@@ -43,7 +43,17 @@ const GIFTS = [
     hint: "Este sobre está sellado hasta tu próximo cumpleaños.",
     unlockDate: "2027-06-22",
     showCountdown: true,
-    flyer: "carta"
+    letter: {
+      date: "20 de junio de 2026",
+      greeting: "Hola mi gorda",
+      paragraphs: [
+        "Mientras leés esto estás cumpliendo 20 años, pero mientras lo escribo tenés 18, una paradoja al estilo Christopher Nolan. Estoy ansioso porque pase un año y que me estés leyendo esto, ¿cuántas cosas vamos a haber vivido para ese entonces?",
+        "Pero más allá del montón de planes y sueños que tenemos dando vueltas: lugares por conocer, viajes por realizar, comidas por probar, pienso más en nuestras cosas de todos los días: qué películas veremos, qué alfajores habremos probado, qué apostaremos jugando al truco. Porque la magia de lo nuestro no está en los detalles grandes, sino en la compañía que nos damos día a día.",
+        "Cuando empecé a pensar tu regalo, quería darte algo que te acompañara más tiempo que un solo día. Por eso armé esta caja, por eso todos estos regalos vienen cargados de tanto misterio. Te imagino volviendo a entrar cada día, encontrando algo nuevo, tratando de adivinar lo siguiente, suplicándome para que te diga y yo negándome hasta la muerte. Por eso te debo una disculpa de antemano, conociéndote, estoy seguro que me has odiado más que nunca por estas esperas.",
+        "Ahora que estás en el futuro ya has vivido un montón de cosas, ¿ya me recibí? ¿Argentina ganó el mundial? ¿La lepra ganó la libertadores? ¿Llegaste a las 10 mil copas en el clash? De lo que estoy seguro es de que te convertiste en una mejor persona, una de las cosas que más admiro de vos es tu capacidad de crecer día a día y ser una mejor novia, amiga, hija, estudiante… poniéndole amor y cuidando a todas las personas que querés.",
+        "Espero que hayas disfrutado todos los regalos que pensé, y si en algún mal momento volvés al muro de fotos y eso te saca una sonrisa: este regalo cumplió su objetivo. Prometo hacer todo lo posible para cumplir todos nuestros sueños y prometo amarte para toda la vida. Felices 19, 20 y los años que tengas cuando vuelvas a leer esta carta. Te amo mucho"
+      ]
+    }
   },
   {
     id: "gift-cena",
@@ -65,11 +75,11 @@ const GIFTS = [
     id: "gift-primavera",
     type: "date",
     icon: "🌸",
-    name: "???",
-    hint: "Cuando empiece a pasar el frio y las flores vuelvan a florecer, este regalo va a aparecer",
+    name: "¿Preparada para perder?",
+    hint: "De la Wii a la realidad",
     unlockDate: "2026-09-22",
     customLabel: "Cuando menos te lo esperes..",
-    noOpen: true
+    flyer: "primavera.png"
   },
   {
     id: "gift-verano",
@@ -93,7 +103,8 @@ const GIFTS = [
 ];
 
 const WALL_PHOTOS = [
-  // { src: "fotos/foto1.jpg", caption: "Primera vez que lo cumplimos ✨", date: "enero 2026" },
+  { src: "assets/muro-noche-especial.jpeg", caption: "Una noche especial" },
+  { src: "assets/muro-cena-sushi.jpeg", caption: "Sushi juntos" },
 ];
 
 // ══════════════════════════════════════════════════════════
@@ -520,13 +531,13 @@ function renderGifts() {
       }
     }
 
-    // Botón "Abrir" → dispara la animación del flyer.
-    // Los regalos con noOpen (primavera, verano) no tienen botón ni interacción.
+    // Botón "Abrir" → dispara la animación de la invitación.
+    // Los regalos con noOpen no tienen botón ni interacción.
     let abrirBtnHtml = '';
-    if (!gift.noOpen && gift.type !== 'password' && gift.flyer) {
+    if (!gift.noOpen && gift.type !== 'password' && (gift.flyer || gift.message || gift.letter)) {
       abrirBtnHtml = isLocked
         ? `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`
-        : `<button class="btn gift-open-btn" onclick="openGiftFlyer('${gift.name}', '${gift.flyer}')">Abrir</button>`;
+        : `<button class="btn gift-open-btn" onclick="openGift('${gift.id}')">Abrir</button>`;
     } else if (!gift.noOpen && gift.type !== 'password' && isLocked) {
       abrirBtnHtml = `<button class="btn gift-open-btn" disabled>🔒 Bloqueado</button>`;
     }
@@ -593,11 +604,37 @@ function unlockWithPassword(giftId, correctPw) {
 }
 
 // ── ANIMACIÓN: ABRIR EL FLYER DE UN REGALO ──
-function openGiftFlyer(giftName, flyerKeyOrArr) {
+function openGift(giftId) {
+  const gift = GIFTS.find(g => g.id === giftId);
+  if (!gift) return;
+  if (gift.type === 'date' && new Date() < new Date(gift.unlockDate + 'T00:00:00')) return;
+  openGiftFlyer(gift.name, gift.flyer, gift.message, gift.letter);
+}
+
+function openGiftFlyer(giftName, flyerKeyOrArr, message, letter) {
   const overlay = document.getElementById('giftFlyerOverlay');
   const img = document.getElementById('giftFlyerImg');
   const title = document.getElementById('giftFlyerTitle');
   const counter = document.getElementById('giftFlyerCounter');
+  const invitation = document.getElementById('giftFlyerMessage');
+  const paper = document.getElementById('giftLetter');
+  const letterBody = document.getElementById('giftLetterBody');
+
+  title.textContent = giftName === '???' ? '' : giftName;
+  invitation.textContent = message || '';
+  invitation.hidden = !message;
+  img.hidden = !!message || !!letter;
+  overlay.classList.toggle('flyer-text', !!message || !!letter);
+  overlay.classList.toggle('flyer-letter', !!letter);
+  paper.hidden = !letter;
+  document.getElementById('giftLetterDate').textContent = letter?.date || '';
+  document.getElementById('giftLetterGreeting').textContent = letter?.greeting || '';
+  letterBody.replaceChildren(...(letter?.paragraphs || []).map(text => {
+    const paragraph = document.createElement('p');
+    paragraph.textContent = text;
+    return paragraph;
+  }));
+  paper.scrollTop = 0;
 
   // Determinar el array de imágenes: puede ser string o array
   let sources = [];
@@ -626,7 +663,6 @@ function openGiftFlyer(giftName, flyerKeyOrArr) {
       return;
     }
     img.src = currentFlyerImages[index];
-    title.textContent = giftName === '???' ? '' : giftName;
     if (currentFlyerImages.length > 1) {
       counter.textContent = `${index + 1} / ${currentFlyerImages.length}`;
     } else {
