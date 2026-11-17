@@ -2991,3 +2991,48 @@ body {
   .clothes-peg { width: 10px; height: 20px; }
   .clothes-empty-icon { font-size: 1.3rem; }
 }
+
+/* Escritorio: recuerdos grandes y espacios pendientes en una fila propia. */
+@media (min-width: 1024px) {
+  #wall-grid {
+    --wall-desktop-width: min(1180px, calc(100vw - 6rem));
+    display: block;
+    width: var(--wall-desktop-width) !important;
+    max-width: none;
+    margin-left: calc((100% - var(--wall-desktop-width)) / 2) !important;
+    margin-right: calc((100% - var(--wall-desktop-width)) / 2) !important;
+    padding: 0;
+  }
+
+  #wall-grid .clothesline-items {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 3.5rem 2.5rem;
+    align-items: start;
+  }
+
+  #wall-grid .clothes-slot {
+    grid-column: span 6;
+    width: 100%;
+    max-width: none;
+  }
+
+  #wall-grid .clothes-slot:not(.clothes-slot--empty) .clothes-photo {
+    padding: 12px 12px 34px;
+  }
+
+  #wall-grid .clothes-caption {
+    margin-top: 10px;
+    font-size: 1.3rem;
+  }
+
+  #wall-grid .clothes-slot--empty {
+    grid-column: span 3;
+    max-width: 150px;
+    justify-self: center;
+  }
+
+  #wall-grid .clothes-slot:not(.clothes-slot--empty) + .clothes-slot--empty {
+    grid-column: 1 / span 3;
+  }
+}
